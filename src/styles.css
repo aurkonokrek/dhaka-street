@@ -319,3 +319,94 @@
   .street-walkers[data-walker-index="2"] { display: none; }
   .policeman-img { height: 70px !important; }
 }
+
+/* === Sticky floating buttons === */
+.sticky-buttons {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 999;
+  align-items: center;
+}
+.scroll-top-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(33,38,102,0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(245,200,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.scroll-top-btn:hover {
+  border-color: #F5C800;
+  transform: translateY(-2px);
+}
+.wa-sticky {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: waPulse 2.5s ease infinite;
+}
+.wa-sticky:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+}
+@keyframes waPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+}
+@media (max-width: 767px) {
+  .sticky-buttons { bottom: 20px; right: 16px; gap: 10px; }
+  .scroll-top-btn { width: 44px; height: 44px; }
+  .wa-sticky { width: 48px; height: 48px; }
+}
+
+/* === Naga Shingara card === */
+.naga-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 38px;
+  margin-bottom: 14px;
+}
+.naga-icon .icon-mountain {
+  filter: hue-rotate(290deg) saturate(5) brightness(0.8);
+  font-size: 34px;
+}
+.naga-icon .icon-shingara {
+  filter: sepia(1) saturate(4) hue-rotate(5deg) brightness(1.1);
+  font-size: 34px;
+}
+.naga-card {
+  position: relative;
+}
+.naga-card::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(90deg, #e74c3c, #F5C800);
+}
+.naga-card:hover {
+  border-color: rgba(220, 50, 50, 0.4);
+  box-shadow: 0 24px 50px rgba(200, 0, 0, 0.2);
+}
