@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { FoodRain } from "../components/food-rain";
 
 function NotFoundComponent() {
   return (
@@ -101,6 +102,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <FoodRain />
         {children}
         <Scripts />
       </body>
