@@ -411,9 +411,7 @@
   box-shadow: 0 24px 50px rgba(200, 0, 0, 0.2);
 }
 
-/* === Heavier font treatment (global) === */
-
-/* Hangyaboli pseudo-bold + size bumps */
+/* === Hangyaboli hard drop shadow === */
 h1, h2, h3, h4,
 .font-display,
 .section-title,
@@ -423,57 +421,33 @@ h1, h2, h3, h4,
 .card-title,
 .badge-pill,
 .price-label {
-  -webkit-text-stroke: 0.6px currentColor;
-  text-shadow: 1.5px 1.5px 0px currentColor;
-  letter-spacing: 0.03em; /* was 0.04em, -0.01em */
+  text-shadow:
+    3px 3px 0px rgba(0, 0, 0, 0.5),
+    5px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
-h1 { font-size: 110%; }
-h2 { font-size: 108%; }
-h3 { font-size: 106%; }
-.cta-button { font-size: 104%; }
+/* Yellow Hangyaboli text — darker shadow so it doesn't wash out */
+.text-yellow-street,
+.text-\[\#F5C800\],
+[style*="#F5C800"].font-display,
+.font-display.text-yellow-street,
+h1.text-yellow-street, h2.text-yellow-street, h3.text-yellow-street, h4.text-yellow-street {
+  text-shadow:
+    3px 3px 0px rgba(180, 100, 0, 0.6),
+    5px 5px 0px rgba(0, 0, 0, 0.25);
+}
 
-/* Space Mono → 700 globally, except long-form body */
-body,
-button,
-input,
-select,
-textarea,
+/* Space Mono — nav links and section tags bold, body 400 */
 nav a,
-.section-tag,
-.menu-item-name,
-.price-label,
-.tab-label,
-.card-description,
-.badge-pill {
+.section-tag {
   font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-/* Keep these at 400 (long-form readability) */
-p,
-.body-text,
-.about-body,
-.review-text,
-.contact-detail,
-.footer-copy,
-input::placeholder,
-textarea::placeholder {
-  font-weight: 400;
-  letter-spacing: normal;
 }
 
 /* Anek Bangla weights */
 .font-bangla {
-  font-weight: 600;
+  font-weight: 500;
 }
 .font-bangla-heading,
 h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
-  font-weight: 800;
-}
-.hero-bangla-sub {
   font-weight: 700;
-}
-.footer-bangla {
-  font-weight: 600;
 }
