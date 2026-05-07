@@ -218,12 +218,20 @@ function Index() {
       </nav>
 
       {/* HERO */}
-      <section id="top" className="relative min-h-screen pt-24 pb-0 overflow-hidden dot-grid flex flex-col">
+      <section id="top" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
+        {/* Star field */}
+        <div className="absolute inset-0 star-field pointer-events-none" />
+        {/* String lights along top */}
+        <div className="absolute top-16 left-0 right-0 h-2 string-lights opacity-80 pointer-events-none" />
+        {/* Crescent moon */}
+        <MoonSvg className="absolute top-24 right-10 sm:right-24 w-14 h-14 opacity-90 drop-shadow-[0_0_10px_rgba(245,200,0,0.4)]" />
+        {/* Dot grid */}
+        <div className="absolute inset-0 dot-grid opacity-60 pointer-events-none" />
         {/* Floating background food */}
-        <ShingaraSvg className="absolute top-32 left-8 w-32 h-32 opacity-[0.12] animate-float-faint" />
-        <ChaiSvg className="absolute top-40 right-12 w-28 h-28 opacity-[0.12] animate-float-faint" />
-        <MuriSvg className="absolute bottom-60 left-20 w-32 h-32 opacity-[0.12] animate-float-faint" />
-        <WingSvg className="absolute top-1/2 right-1/4 w-28 h-28 opacity-[0.12] animate-float-faint" />
+        <ShingaraSvg className="absolute top-40 left-8 w-28 h-28 opacity-[0.10] animate-float-faint" />
+        <ChaiSvg className="absolute top-52 right-32 w-24 h-24 opacity-[0.10] animate-float-faint" />
+        <MuriSvg className="absolute bottom-72 left-20 w-28 h-28 opacity-[0.10] animate-float-faint" />
+        <WingSvg className="absolute top-1/2 right-1/4 w-24 h-24 opacity-[0.10] animate-float-faint" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center text-center">
           <div className="inline-block mx-auto text-yellow-street text-xs sm:text-sm uppercase tracking-[0.3em] mb-6 reveal">
@@ -251,9 +259,16 @@ function Index() {
         </div>
 
         {/* Animated street scene */}
-        <div className="relative w-full h-44 mt-8">
+        <div className="relative w-full h-52 mt-8">
           {/* Sidewalk */}
-          <div className="absolute top-0 left-0 right-0 h-10 bg-[#2a3175] border-t-2 border-yellow-street/30">
+          <div className="absolute top-0 left-0 right-0 h-16 bg-[#2a3175] border-t-2 border-yellow-street/30 overflow-hidden">
+            {/* Lamp glow */}
+            <div className="absolute inset-0 lamp-glow pointer-events-none" />
+            {/* Traffic police standing on left */}
+            <div className="absolute left-[8%] top-[-46px] z-10">
+              <TrafficPoliceSvg className="w-16 h-24" />
+            </div>
+            {/* Walkers */}
             {walkers.map((w, i) => (
               <div
                 key={i}
@@ -265,22 +280,22 @@ function Index() {
             ))}
           </div>
           {/* Road */}
-          <div className="absolute top-10 left-0 right-0 bottom-0 bg-[#0a0d2e] overflow-hidden">
+          <div className="absolute top-16 left-0 right-0 bottom-0 bg-[#0a0d2e] overflow-hidden">
             {/* dashed center line */}
             <div className="absolute top-1/2 left-0 right-0 h-1 -translate-y-1/2 flex gap-4">
               {Array.from({ length: 40 }).map((_, i) => (
                 <div key={i} className="w-12 h-1 bg-yellow-street shrink-0" />
               ))}
             </div>
-            {/* Vehicles */}
-            <div className="absolute bottom-3 left-0 animate-drive-right">
-              <CNGSvg className="w-28 h-20" />
+            {/* Vehicles — CNG L→R, Rickshaw L→R (slower), Bus R→L */}
+            <div className="absolute bottom-2 left-0" style={{ animation: "drive-right 16s linear infinite", animationDelay: "-2s" }}>
+              <CNGSvg className="w-32 h-24" />
             </div>
-            <div className="absolute bottom-3 left-0 animate-drive-right-slow" style={{ animationDelay: "-8s" }}>
-              <RickshawSvg className="w-32 h-22" />
+            <div className="absolute bottom-2 left-0" style={{ animation: "drive-right 26s linear infinite", animationDelay: "-12s" }}>
+              <RickshawSvg className="w-36 h-24" />
             </div>
-            <div className="absolute bottom-4 left-0 animate-drive-left">
-              <BusSvg className="w-44 h-22" />
+            <div className="absolute bottom-3 left-0" style={{ animation: "drive-left 22s linear infinite", animationDelay: "-6s" }}>
+              <BusSvg className="w-48 h-24" />
             </div>
           </div>
         </div>
