@@ -455,7 +455,7 @@ function Index() {
       </section>
 
       {/* STORY */}
-      <section id="story" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
+      <section id="about" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="reveal">
             <span className="text-[#e8721c] uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Our Story</span>
