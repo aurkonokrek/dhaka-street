@@ -335,9 +335,35 @@ function Index() {
 
       {/* MENU */}
       <section id="menu" className="relative bg-[#181e55] py-24 px-4 sm:px-6 overflow-hidden">
-        <div className="absolute top-20 left-10 text-9xl opacity-[0.04] select-none">🥟</div>
-        <div className="absolute top-1/2 right-10 text-9xl opacity-[0.04] select-none">🍗</div>
-        <div className="absolute bottom-20 left-1/3 text-9xl opacity-[0.04] select-none">☕</div>
+        {/* Food rain */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {Array.from({ length: 24 }).map((_, i) => {
+            const items = ["🥟", "☕", "🍗", "🌶️", "🍔", "🫙"];
+            const item = items[i % items.length];
+            const left = (i * 4.3) % 100;
+            const dur = 3 + ((i * 1.7) % 6);
+            const delay = (i * 0.6) % 10;
+            const size = 16 + ((i * 7) % 22);
+            const drift = (i % 2 === 0 ? 1 : -1) * (20 + (i * 3) % 40);
+            const op = 0.08 + ((i * 13) % 8) / 100;
+            return (
+              <span
+                key={i}
+                className="absolute top-0 select-none"
+                style={{
+                  left: `${left}%`,
+                  fontSize: `${size}px`,
+                  animation: `food-rain ${dur}s linear infinite`,
+                  animationDelay: `${delay}s`,
+                  ["--rain-opacity" as never]: op,
+                  ["--drift" as never]: `${drift}px`,
+                }}
+              >
+                {item}
+              </span>
+            );
+          })}
+        </div>
 
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center reveal">
