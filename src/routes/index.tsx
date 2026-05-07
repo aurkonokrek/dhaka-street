@@ -525,17 +525,29 @@ function Index() {
           </div>
 
           <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {HERO_FOODS.map((f) => (
-              <div
-                key={f.name}
-                className="reveal group relative bg-[#212666] rounded-2xl p-8 border-t-4 border-transparent hover:border-yellow-street transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(245,200,0,0.3)]"
-              >
-                <div className="text-6xl animate-float-slow inline-block">{f.emoji}</div>
-                <h3 className="font-display text-3xl mt-4 text-yellow-street">{f.name}</h3>
-                <p className="mt-2 text-white/70" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>{f.desc}</p>
-                <p className="font-display mt-4 text-white" style={{ letterSpacing: "0.04em" }}>{f.price}</p>
-              </div>
-            ))}
+            {HERO_FOODS.map((f) => {
+              const isNaga = f.variant === "naga";
+              return (
+                <div
+                  key={f.name}
+                  className={`reveal group relative bg-[#212666] rounded-2xl p-8 border-t-4 border-transparent transition-all duration-300 hover:-translate-y-2 ${
+                    isNaga ? "naga-card" : "hover:border-yellow-street hover:shadow-[0_20px_40px_-15px_rgba(245,200,0,0.3)]"
+                  }`}
+                >
+                  {isNaga ? (
+                    <div className="naga-icon animate-float-slow">
+                      <span className="icon-mountain">⛰</span>
+                      <span className="icon-shingara">🥟</span>
+                    </div>
+                  ) : (
+                    <div className="text-6xl animate-float-slow inline-block">{f.emoji}</div>
+                  )}
+                  <h3 className="font-display text-3xl mt-4 text-yellow-street">{f.name}</h3>
+                  <p className="mt-2 text-white/70" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>{f.desc}</p>
+                  <p className="font-display mt-4 text-white" style={{ letterSpacing: "0.04em" }}>{f.price}</p>
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-12 text-center reveal">
