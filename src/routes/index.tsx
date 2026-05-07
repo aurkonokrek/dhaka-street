@@ -189,11 +189,11 @@ function Index() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <a href="#top" className="flex items-center gap-3">
             <img src={logo} alt="Dhaka Street Logo" className="w-11 h-11 rounded-full border-2 border-yellow-street" />
-            <span className="font-display text-2xl tracking-wider text-yellow-street">DHAKA STREET</span>
+            <span className="font-display text-2xl text-yellow-street">Dhaka Street</span>
           </a>
           <div className="hidden md:flex items-center gap-8">
             {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="text-sm uppercase tracking-wider hover:text-yellow-street transition-colors">
+              <a key={n.href} href={n.href} className="uppercase hover:text-yellow-street transition-colors" style={{ fontSize: "12px", letterSpacing: "0.12em" }}>
                 {n.label}
               </a>
             ))}
@@ -202,7 +202,8 @@ function Index() {
             href={WHATSAPP}
             target="_blank"
             rel="noreferrer"
-            className="bg-whatsapp text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 hover:scale-105 transition-transform"
+            className="font-display bg-whatsapp text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:scale-105 transition-transform"
+            style={{ letterSpacing: "0.04em" }}
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
               <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
@@ -229,26 +230,27 @@ function Index() {
         <WingSvg className="absolute top-1/2 right-1/4 w-24 h-24 opacity-[0.10] animate-float-faint" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center text-center">
-          <div className="inline-block mx-auto text-yellow-street text-xs sm:text-sm uppercase tracking-[0.3em] mb-6 reveal">
-            ✦ The Hangout Capital of Dhaka
+          <div className="reveal inline-block mx-auto mb-6 font-bangla text-yellow-street text-sm sm:text-base" style={{ letterSpacing: "0.04em" }}>
+            ✦ আড্ডা দাও। খাও। চলে যাও।
           </div>
           <h1 className="reveal font-display text-yellow-street leading-[0.85]" style={{ fontSize: "clamp(60px, 14vw, 130px)" }}>
-            DHAKA
+            Dhaka
             <br />
-            STREET
+            Street
           </h1>
-          <p className="reveal font-bangla text-2xl sm:text-3xl mt-6 text-white/90">
+          <p className="reveal font-bangla text-2xl sm:text-3xl mt-6 text-white/90 font-bangla-heading">
             ঢাকার স্বাদ। আমাদের আড্ডা।
           </p>
-          <p className="reveal mt-4 max-w-xl mx-auto text-white/80 text-base sm:text-lg">
-            Where the energy of Dhaka's streets meets food that hits different.
+          <p className="reveal mt-4 max-w-xl mx-auto text-white/80 lowercase" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>
+            real food. no nonsense. just dhaka.
           </p>
           <div className="reveal mt-10">
             <a
               href="#menu"
-              className="inline-block bg-yellow-street text-indigo-deep font-bold px-10 py-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform shadow-[0_10px_30px_-10px_rgba(245,200,0,0.6)]"
+              className="font-display inline-block bg-yellow-street text-indigo-deep px-10 py-4 rounded-full hover:scale-105 transition-transform shadow-[0_10px_30px_-10px_rgba(245,200,0,0.6)]"
+              style={{ letterSpacing: "0.04em", fontSize: "1.25rem" }}
             >
-              See Our Menu
+              See The Menu
             </a>
           </div>
         </div>
@@ -396,20 +398,17 @@ function Index() {
       <section id="story" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="reveal">
-            <span className="text-[#e8721c] uppercase tracking-[0.3em] text-sm font-semibold">Our Story</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3 leading-none">WHERE DHAKA COMES ALIVE</h2>
-            <p className="mt-6 text-lg leading-relaxed">
-              Born out of love for the city we call home — Dhaka Street is what happens when the chaos of Old Dhaka,
-              the smell of frying shingara, the ring of a rickshaw bell, and the warm fog of dudh cha all gather
-              under one roof. We turned the street into the menu.
+            <span className="text-[#e8721c] uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Our Story</span>
+            <h2 className="font-display text-5xl md:text-7xl mt-3 leading-none">Born on the streets. Built for the adda.</h2>
+            <p className="mt-6 leading-[1.8]" style={{ fontSize: "0.875rem" }}>
+              Dhaka Street didn't come from a business plan. It came from a city — the smell of shingara frying at 11pm, rickshaw bells at rush hour, and a cup of dudh cha that somehow fixes everything. We just put it all under one roof.
             </p>
-            <p className="mt-4 text-lg leading-relaxed">
-              From hand-painted walls to the way the chai is poured — every corner is built for the adda your
-              friend group keeps trying to plan. Pull up a chair. Stay a while. Order another cha.
+            <p className="mt-4 leading-[1.8]" style={{ fontSize: "0.875rem" }}>
+              The walls are painted with Dhaka's soul. The food tastes like the streets. And the adda? That's on you.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {["DINE-IN", "OUTDOOR SEATING", "RESERVATIONS"].map((b) => (
-                <span key={b} className="bg-indigo-deep text-yellow-street px-4 py-2 rounded-full text-sm font-semibold tracking-wider">
+              {["Dine-in", "Outdoor Seating", "Reservations"].map((b) => (
+                <span key={b} className="font-display bg-indigo-deep text-yellow-street px-4 py-2 rounded-full text-sm" style={{ letterSpacing: "0.04em" }}>
                   {b}
                 </span>
               ))}
@@ -458,10 +457,10 @@ function Index() {
 
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center reveal">
-            <span className="text-yellow-street uppercase tracking-[0.3em] text-sm font-semibold">The Menu</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3">STREET FOOD. ELEVATED.</h2>
-            <p className="mt-4 text-white/70 max-w-xl mx-auto">
-              Fresh flavors & comfort bites — straight from Dhaka's soul.
+            <span className="text-yellow-street uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>The Menu</span>
+            <h2 className="font-display text-5xl md:text-7xl mt-3">Order Something.</h2>
+            <p className="mt-4 text-white/70 max-w-xl mx-auto" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>
+              You won't regret it.
             </p>
           </div>
 
@@ -472,9 +471,9 @@ function Index() {
                 className="reveal group relative bg-[#212666] rounded-2xl p-8 border-t-4 border-transparent hover:border-yellow-street transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(245,200,0,0.3)]"
               >
                 <div className="text-6xl animate-float-slow inline-block">{f.emoji}</div>
-                <h3 className="font-display text-3xl mt-4 text-yellow-street tracking-wider">{f.name}</h3>
-                <p className="mt-2 text-white/70">{f.desc}</p>
-                <p className="mt-4 font-semibold text-white">{f.price}</p>
+                <h3 className="font-display text-3xl mt-4 text-yellow-street">{f.name}</h3>
+                <p className="mt-2 text-white/70" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>{f.desc}</p>
+                <p className="font-display mt-4 text-white" style={{ letterSpacing: "0.04em" }}>{f.price}</p>
               </div>
             ))}
           </div>
@@ -482,7 +481,8 @@ function Index() {
           <div className="mt-12 text-center reveal">
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              className="border-2 border-yellow-street text-yellow-street font-bold uppercase tracking-wider px-8 py-3 rounded-full hover:bg-yellow-street hover:text-indigo-deep transition-colors"
+              className="font-display border-2 border-yellow-street text-yellow-street px-8 py-3 rounded-full hover:bg-yellow-street hover:text-indigo-deep transition-colors"
+              style={{ letterSpacing: "0.04em", fontSize: "1.1rem" }}
             >
               {menuOpen ? "Hide Full Menu" : "View Full Menu"}
             </button>
@@ -491,11 +491,12 @@ function Index() {
           {menuOpen && (
             <div id="full-menu" className="mt-12 bg-[#212666] rounded-3xl p-6 sm:p-10 border border-yellow-street/30">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                <h3 className="font-display text-3xl text-yellow-street">FULL MENU</h3>
+                <h3 className="font-display text-3xl text-yellow-street">Full Menu</h3>
                 <a
                   href="#"
                   onClick={(e) => e.preventDefault()}
-                  className="bg-yellow-street text-indigo-deep px-5 py-2 rounded-full text-sm font-semibold"
+                  className="font-display bg-yellow-street text-indigo-deep px-5 py-2 rounded-full text-sm"
+                  style={{ letterSpacing: "0.04em" }}
                 >
                   ⬇ Download PDF
                 </a>
@@ -505,11 +506,12 @@ function Index() {
                   <button
                     key={t}
                     onClick={() => setActiveTab(t)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    className={`font-display px-4 py-2 rounded-full text-sm transition-colors ${
                       activeTab === t
                         ? "bg-yellow-street text-indigo-deep"
                         : "bg-white/5 text-white/80 hover:bg-white/10"
                     }`}
+                    style={{ letterSpacing: "0.04em" }}
                   >
                     {t}
                   </button>
@@ -517,9 +519,9 @@ function Index() {
               </div>
               <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
                 {MENU_TABS[activeTab].map((item, i) => (
-                  <div key={i} className="flex justify-between items-baseline border-b border-white/5 pb-2 font-bangla">
-                    <span className="text-white/90">{item.name}</span>
-                    <span className="text-yellow-street font-semibold whitespace-nowrap ml-3">৳ {item.price}</span>
+                  <div key={i} className="flex justify-between items-baseline border-b border-white/5 pb-2">
+                    <span className="font-bangla text-white/90">{item.name}</span>
+                    <span className="font-display text-yellow-street whitespace-nowrap ml-3" style={{ letterSpacing: "0.04em" }}>৳ {item.price}</span>
                   </div>
                 ))}
               </div>
@@ -532,8 +534,9 @@ function Index() {
       <section id="reviews" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center reveal">
-            <span className="text-[#e8721c] uppercase tracking-[0.3em] text-sm font-semibold">What They Say</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3">THE CROWD HAS SPOKEN</h2>
+            <span className="text-[#e8721c] uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Real Talk</span>
+            <h2 className="font-display text-5xl md:text-7xl mt-3">Real People. Real Adda.</h2>
+            <p className="mt-3" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>No fake reviews. Just people who showed up.</p>
           </div>
           <div className="mt-14 grid md:grid-cols-3 gap-6">
             {REVIEWS.map((r) => (
@@ -559,10 +562,10 @@ function Index() {
       <section className="bg-indigo-deep py-24 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto text-center">
           <div className="reveal">
-            <h2 className="font-display text-5xl md:text-7xl">
-              HEAR IT FROM <span className="text-yellow-street">THEM</span>
+            <span className="text-yellow-street uppercase font-semibold block" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Hear It From Them</span>
+            <h2 className="font-display text-5xl md:text-7xl mt-3">
+              Don't take our word for it.
             </h2>
-            <p className="text-white/60 uppercase tracking-[0.3em] text-xs mt-3">Customer Stories</p>
           </div>
           <div className="reveal mt-12 relative aspect-video bg-[#181e55] rounded-3xl border border-yellow-street/30 flex items-center justify-center overflow-hidden">
             <div className="dot-grid absolute inset-0 opacity-50" />
@@ -581,7 +584,7 @@ function Index() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center reveal">
             <h2 className="font-display text-5xl md:text-7xl">
-              COME, EAT, <span className="text-yellow-street">ADDA.</span>
+              Show Up. We'll Feed You.
             </h2>
           </div>
           <div className="mt-16 grid md:grid-cols-2 gap-12">
@@ -602,12 +605,13 @@ function Index() {
                 href={WHATSAPP}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 bg-whatsapp text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:scale-105 transition-transform"
+                className="font-display inline-flex items-center gap-3 bg-whatsapp text-white px-8 py-4 rounded-full hover:scale-105 transition-transform"
+                style={{ letterSpacing: "0.04em", fontSize: "1.1rem" }}
               >
                 <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                   <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
                 </svg>
-                Chat on WhatsApp
+                Chat with us
               </a>
             </div>
             <form
@@ -617,7 +621,7 @@ function Index() {
               }}
               className="reveal bg-[#212666] p-8 rounded-2xl border border-yellow-street/20 space-y-4"
             >
-              <h3 className="font-display text-2xl text-yellow-street">SEND US LOVE (OR FEEDBACK)</h3>
+              <h3 className="font-display text-2xl text-yellow-street">Got something to say?</h3>
               <input
                 required
                 placeholder="Your Name"
@@ -636,9 +640,10 @@ function Index() {
               />
               <button
                 type="submit"
-                className="w-full bg-yellow-street text-indigo-deep font-bold py-3 rounded-lg uppercase tracking-wider hover:scale-[1.02] transition-transform"
+                className="font-display w-full bg-yellow-street text-indigo-deep py-3 rounded-lg hover:scale-[1.02] transition-transform"
+                style={{ letterSpacing: "0.04em", fontSize: "1.1rem" }}
               >
-                {submitted ? "✓ Sent! See you soon" : "Submit"}
+                {submitted ? "✓ Sent! See you soon" : "Send It"}
               </button>
             </form>
           </div>
@@ -651,9 +656,10 @@ function Index() {
           <div>
             <div className="flex items-center gap-3">
               <img src={logo} alt="Dhaka Street Logo" className="w-12 h-12 rounded-full border-2 border-yellow-street" />
-              <span className="font-display text-2xl text-yellow-street tracking-wider">DHAKA STREET</span>
+              <span className="font-display text-2xl text-yellow-street">Dhaka Street</span>
             </div>
-            <p className="font-bangla text-white/80 mt-4">ঢাকার স্বাদ, আমাদের আড্ডা।</p>
+            <p className="text-white/80 mt-4" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>No reservations needed. Just hunger.</p>
+            <p className="font-bangla text-yellow-street mt-1 font-bangla-heading">ঢাকার স্বাদ ✦</p>
             <div className="flex gap-3 mt-5">
               {[
                 { href: "https://facebook.com/LifeAtDhakaStreet", label: "Facebook", svg: "M22 12a10 10 0 10-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12H17l-.4 2.9h-2.3v7A10 10 0 0022 12z" },
@@ -668,7 +674,7 @@ function Index() {
             </div>
           </div>
           <div>
-            <div className="font-display text-xl text-yellow-street tracking-wider mb-4">QUICK LINKS</div>
+            <div className="font-display text-xl text-yellow-street mb-4">Quick Links</div>
             <ul className="space-y-2 text-white/80 text-sm">
               {NAV.map((n) => (
                 <li key={n.href}><a href={n.href} className="hover:text-yellow-street">{n.label}</a></li>
@@ -676,7 +682,7 @@ function Index() {
             </ul>
           </div>
           <div>
-            <div className="font-display text-xl text-yellow-street tracking-wider mb-4">FOLLOW US</div>
+            <div className="font-display text-xl text-yellow-street mb-4">Follow Us</div>
             <ul className="space-y-2 text-white/80 text-sm">
               <li><a href="https://facebook.com/LifeAtDhakaStreet" target="_blank" rel="noreferrer" className="hover:text-yellow-street">facebook.com/LifeAtDhakaStreet</a></li>
               <li><a href="https://instagram.com/lifeatdhakastreet" target="_blank" rel="noreferrer" className="hover:text-yellow-street">instagram.com/lifeatdhakastreet</a></li>
