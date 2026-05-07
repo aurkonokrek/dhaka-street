@@ -281,21 +281,21 @@ function Index() {
               src={busPng}
               alt=""
               className="street-bus absolute"
-              style={{ bottom: "8px", height: "110px", width: "auto", zIndex: 4 }}
+              style={{ bottom: "0px", height: "110px", width: "auto", zIndex: 4, display: "block" }}
             />
             {/* CNG — L→R */}
             <img
               src={cngPng}
               alt=""
               className="street-cng absolute"
-              style={{ bottom: "8px", height: "80px", width: "auto", zIndex: 5 }}
+              style={{ bottom: "0px", height: "80px", width: "auto", zIndex: 5, display: "block" }}
             />
             {/* RICKSHAW — L→R */}
             <img
               src={rickshawPng}
               alt=""
               className="street-rickshaw absolute"
-              style={{ bottom: "8px", height: "90px", width: "auto", zIndex: 5 }}
+              style={{ bottom: "0px", height: "90px", width: "auto", zIndex: 5, display: "block" }}
             />
           </div>
 
