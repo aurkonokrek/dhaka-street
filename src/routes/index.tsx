@@ -39,7 +39,7 @@ const WHATSAPP = "https://wa.me/8801789977034";
 const NAV = [
   { label: "Story", href: "#story" },
   { label: "Menu", href: "#menu" },
-  { label: "Reviews", href: "#reviews" },
+  { label: "Moments", href: "#moments" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -149,29 +149,12 @@ const MENU_TABS: Record<string, { name: string; price: string }[]> = {
   ],
 };
 
-const REVIEWS = [
-  {
-    name: "Tahmid R.",
-    school: "BUET",
-    text: "The Naga Challenger broke me — in a good way. Dudh Cha refill loop was unmatched. New adda spot fixed.",
-  },
-  {
-    name: "Anika S.",
-    school: "North South University",
-    text: "Loaded Vibe Box for the squad, Cheesy Shingara for the soul. Walls are art, vibe is straight Dhaka.",
-  },
-  {
-    name: "Rifat H.",
-    school: "Dhaka University",
-    text: "Felt like the street walked into the restaurant. Wings hit, cha hit, conversation hit harder.",
-  },
-];
 
 function Index() {
   useScrollReveal();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Street Bites");
-  const [submitted, setSubmitted] = useState(false);
+  
 
   const walkerDelays = [0, -8, -15];
 
@@ -530,124 +513,206 @@ function Index() {
         </div>
       </section>
 
-      {/* REVIEWS */}
-      <section id="reviews" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
+      {/* MOMENTS GALLERY + VIDEO */}
+      <section id="moments" className="bg-[#181e55] py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
+          {/* PART 1 — Gallery */}
           <div className="text-center reveal">
-            <span className="text-[#e8721c] uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Real Talk</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3">Real People. Real Adda.</h2>
-            <p className="mt-3" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>No fake reviews. Just people who showed up.</p>
+            <div className="font-bangla text-yellow-street text-sm" style={{ letterSpacing: "0.04em" }}>
+              আমাদের মানুষ
+            </div>
+            <h2 className="font-display text-white text-5xl md:text-7xl mt-3">Real People. Real Vibe.</h2>
           </div>
-          <div className="mt-14 grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r) => (
-              <div key={r.name} className="reveal bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-1 transition-transform">
-                <div className="text-yellow-street text-xl">★★★★★</div>
-                <p className="italic mt-4 text-indigo-deep/90">"{r.text}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-deep text-yellow-street font-bold flex items-center justify-center">
-                    {r.name[0]}
-                  </div>
-                  <div>
-                    <div className="font-semibold">{r.name}</div>
-                    <div className="text-xs text-indigo-deep/60">{r.school}</div>
-                  </div>
-                </div>
+
+          {/* Filter pills */}
+          <div className="mt-8 flex justify-center gap-3 reveal">
+            {["Adda Moments", "Food Shots"].map((p) => (
+              <span
+                key={p}
+                className="font-display border-2 border-yellow-street text-yellow-street px-5 py-2 rounded-full text-sm"
+                style={{ letterSpacing: "0.04em" }}
+              >
+                {p}
+              </span>
+            ))}
+          </div>
+
+          {/* Masonry grid */}
+          <div className="mt-12 columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
+            {[
+              { ar: "4/5" }, { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" },
+              { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" }, { ar: "16/9" },
+              { ar: "4/5" },
+            ].map((p, i) => (
+              <div
+                key={i}
+                className="reveal mb-5 break-inside-avoid bg-[#2a317a] rounded-[12px] flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                style={{ aspectRatio: p.ar, border: "2px solid transparent" }}
+              >
+                <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
+                  <circle cx="12" cy="13" r="3.5" />
+                </svg>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* VIDEO */}
-      <section className="bg-indigo-deep py-24 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="reveal">
-            <span className="text-yellow-street uppercase font-semibold block" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Hear It From Them</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3">
-              Don't take our word for it.
+          <p className="text-center text-white/40 mt-6" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
+            📸 Tag us @lifeatdhakastreet
+          </p>
+
+          {/* Divider */}
+          <div className="my-20 h-px w-full" style={{ background: "rgba(255,255,255,0.06)" }} />
+
+          {/* PART 2 — Video */}
+          <div className="text-center reveal">
+            <div className="text-white/40 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px", letterSpacing: "0.22em" }}>
+              Hear it from them.
+            </div>
+            <h2 className="font-display text-white text-5xl md:text-7xl mt-3 leading-[0.95]">
+              DON'T TAKE
+              <br />
+              <span className="text-yellow-street">OUR WORD</span> FOR IT.
             </h2>
           </div>
-          <div className="reveal mt-12 relative aspect-video bg-[#181e55] rounded-3xl border border-yellow-street/30 flex items-center justify-center overflow-hidden">
-            <div className="dot-grid absolute inset-0 opacity-50" />
-            <button className="relative w-24 h-24 rounded-full bg-yellow-street text-indigo-deep flex items-center justify-center animate-pulse-glow">
-              <svg viewBox="0 0 24 24" className="w-10 h-10 ml-1" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
+
+          <div className="reveal mx-auto mt-12 relative" style={{ maxWidth: "860px" }}>
+            <div
+              className="relative w-full flex flex-col items-center justify-center"
+              style={{
+                aspectRatio: "16/9",
+                background: "#212666",
+                border: "1px solid rgba(245,200,0,0.15)",
+                borderRadius: "20px",
+              }}
+            >
+              <button
+                className="rounded-full flex items-center justify-center animate-pulse-glow"
+                style={{ width: "72px", height: "72px", background: "#F5C800" }}
+                aria-label="Play video"
+              >
+                <svg viewBox="0 0 24 24" className="w-8 h-8 ml-1" fill="#212666">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+              <div className="text-white/50 mt-5" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
+                Customer Stories
+              </div>
+            </div>
+            <p className="text-center text-white/30 mt-4" style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>
+              📍 Replace with your YouTube embed link
+            </p>
           </div>
-          <p className="text-white/40 text-sm mt-4 italic">Replace with YouTube embed link</p>
         </div>
       </section>
 
-      {/* CONTACT */}
-      <section id="contact" className="bg-[#181e55] py-24 px-4 sm:px-6">
+      {/* CONTACT / FIND US */}
+      <section id="contact" className="bg-indigo-deep py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center reveal">
-            <h2 className="font-display text-5xl md:text-7xl">
-              Show Up. We'll Feed You.
+            <div className="font-bangla text-yellow-street text-sm" style={{ letterSpacing: "0.04em" }}>
+              আজকে যাবি নাকি?
+            </div>
+            <h2 className="font-display text-white mt-3 leading-[0.9]" style={{ fontSize: "clamp(56px, 12vw, 130px)" }}>
+              AJKE <span className="text-yellow-street">JABI</span> NAKI?
             </h2>
+            <p className="text-white/50 mt-6 max-w-2xl mx-auto" style={{ fontFamily: "'Space Mono', monospace", fontSize: "13px", lineHeight: 1.8 }}>
+              Tomar plan jai hok — amader address ekhono shei same. Chole asho.
+            </p>
           </div>
-          <div className="mt-16 grid md:grid-cols-2 gap-12">
-            <div className="reveal space-y-6">
-              <div>
-                <div className="text-yellow-street uppercase text-xs tracking-[0.2em] mb-2">Address</div>
-                <p className="text-lg">Dhaka Street HQ, Dhaka, Bangladesh</p>
+
+          {/* Three info cards */}
+          <div className="mt-14 grid md:grid-cols-3 gap-4">
+            {/* Location */}
+            <div className="reveal rounded-2xl p-8" style={{ background: "#2a317a" }}>
+              <div className="text-yellow-street/70 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "10px", letterSpacing: "0.22em" }}>
+                LOCATION
               </div>
-              <div>
-                <div className="text-yellow-street uppercase text-xs tracking-[0.2em] mb-2">Hours</div>
-                <p>Every day · 12:00 PM – 11:30 PM</p>
+              <div className="font-display text-white text-3xl mt-4 leading-tight">
+                HOUSE 12, ROAD 5
+                <br />
+                DHANMONDI, DHAKA
               </div>
-              <div>
-                <div className="text-yellow-street uppercase text-xs tracking-[0.2em] mb-2">Phone</div>
-                <p>+88 01789-977034</p>
+              <a
+                href="https://www.openstreetmap.org/?mlat=23.7461&mlon=90.3742#map=15/23.7461/90.3742"
+                target="_blank"
+                rel="noreferrer"
+                className="text-yellow-street mt-6 inline-block hover:underline"
+                style={{ fontFamily: "'Space Mono', monospace", fontSize: "13px" }}
+              >
+                Open in Maps →
+              </a>
+            </div>
+
+            {/* Hours */}
+            <div className="reveal rounded-2xl p-8" style={{ background: "#2a317a" }}>
+              <div className="text-yellow-street/70 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "10px", letterSpacing: "0.22em" }}>
+                HOURS
+              </div>
+              <div className="font-display text-white text-3xl mt-4 leading-tight">
+                DAILY
+                <br />
+                4 PM – 1 AM
+              </div>
+              <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+            </div>
+
+            {/* WhatsApp */}
+            <div className="reveal rounded-2xl p-8" style={{ background: "#F5C800", color: "#212666" }}>
+              <div className="uppercase opacity-70" style={{ fontFamily: "'Space Mono', monospace", fontSize: "10px", letterSpacing: "0.22em" }}>
+                WHATSAPP
+              </div>
+              <div className="font-display text-3xl mt-4 leading-tight">
+                QUESTION ACHE?
+                <br />
+                MESSAGE KORO.
               </div>
               <a
                 href={WHATSAPP}
                 target="_blank"
                 rel="noreferrer"
-                className="font-display inline-flex items-center gap-3 bg-whatsapp text-white px-8 py-4 rounded-full hover:scale-105 transition-transform"
-                style={{ letterSpacing: "0.04em", fontSize: "1.1rem" }}
+                className="mt-6 inline-block px-6 py-3 rounded-full text-white transition-colors hover:bg-whatsapp"
+                style={{ background: "#212666", fontFamily: "'Space Mono', monospace", fontSize: "13px" }}
               >
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                  <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
-                </svg>
-                Chat with us
+                +880 01789-977034
               </a>
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitted(true);
-              }}
-              className="reveal bg-[#212666] p-8 rounded-2xl border border-yellow-street/20 space-y-4"
+          </div>
+
+          {/* Map */}
+          <div
+            className="reveal mt-10 relative w-full overflow-hidden"
+            style={{
+              borderRadius: "16px",
+              border: "1px solid rgba(245,200,0,0.15)",
+              height: "380px",
+            }}
+          >
+            <iframe
+              title="Dhaka Street location"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=90.36,23.73,90.40,23.77&layer=mapnik"
+              className="w-full h-full"
+              style={{ border: 0 }}
+              loading="lazy"
+            />
+            {/* Pin overlay */}
+            <svg
+              viewBox="0 0 24 24"
+              className="absolute pointer-events-none"
+              style={{ left: "50%", top: "50%", transform: "translate(-50%, -100%)", width: "44px", height: "44px", filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.4))" }}
+              fill="#F5C800"
             >
-              <h3 className="font-display text-2xl text-yellow-street">Got something to say?</h3>
-              <input
-                required
-                placeholder="Your Name"
-                className="w-full bg-[#181e55] border border-white/10 rounded-lg px-4 py-3 focus:border-yellow-street outline-none"
-              />
-              <input
-                required
-                placeholder="Phone or Email"
-                className="w-full bg-[#181e55] border border-white/10 rounded-lg px-4 py-3 focus:border-yellow-street outline-none"
-              />
-              <textarea
-                required
-                rows={4}
-                placeholder="Your feedback..."
-                className="w-full bg-[#181e55] border border-white/10 rounded-lg px-4 py-3 focus:border-yellow-street outline-none resize-none"
-              />
-              <button
-                type="submit"
-                className="font-display w-full bg-yellow-street text-indigo-deep py-3 rounded-lg hover:scale-[1.02] transition-transform"
-                style={{ letterSpacing: "0.04em", fontSize: "1.1rem" }}
-              >
-                {submitted ? "✓ Sent! See you soon" : "Send It"}
-              </button>
-            </form>
+              <path d="M12 2C8 2 5 5 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" stroke="#212666" strokeWidth="1" />
+            </svg>
           </div>
         </div>
+        <style>{`
+          @media (max-width: 767px) {
+            #contact iframe { height: 240px; }
+            #contact .reveal[style*="height: 380px"], #contact div[style*="height: 380px"] { height: 240px !important; }
+          }
+        `}</style>
       </section>
 
       {/* FOOTER */}
