@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import logo from "@/assets/dhaka-street-logo.jpg";
+import busPng from "@/assets/bus.png";
+import cngPng from "@/assets/cng.png";
+import rickshawPng from "@/assets/rickshaw.png";
+import walkersPng from "@/assets/walkers.png";
+import policemanPng from "@/assets/policeman.png";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import {
-  CNGSvg,
-  RickshawSvg,
-  BusSvg,
-  WalkerSvg,
-  TrafficPoliceSvg,
   MoonSvg,
   ShingaraSvg,
   ChaiSvg,
@@ -173,12 +173,7 @@ function Index() {
   const [activeTab, setActiveTab] = useState("Street Bites");
   const [submitted, setSubmitted] = useState(false);
 
-  // Generate stable random positions for walkers
-  const walkers = [
-    { color: "#F5C800", delay: 0, dur: 32 },
-    { color: "#e63946", delay: -10, dur: 38 },
-    { color: "#1a8c3a", delay: -20, dur: 35 },
-  ];
+  const walkerDelays = [0, -8, -15];
 
   useEffect(() => {
     if (menuOpen) {
@@ -258,44 +253,140 @@ function Index() {
           </div>
         </div>
 
-        {/* Animated street scene */}
-        <div className="relative w-full h-52 mt-8">
-          {/* Sidewalk */}
-          <div className="absolute top-0 left-0 right-0 h-16 bg-[#2a3175] border-t-2 border-yellow-street/30 overflow-hidden">
-            {/* Lamp glow */}
-            <div className="absolute inset-0 lamp-glow pointer-events-none" />
-            {/* Traffic police standing on left */}
-            <div className="absolute left-[8%] top-[-46px] z-10">
-              <TrafficPoliceSvg className="w-16 h-24" />
-            </div>
-            {/* Walkers */}
-            {walkers.map((w, i) => (
-              <div
-                key={i}
-                className="absolute top-[-30px]"
-                style={{ animation: `walk ${w.dur}s linear infinite`, animationDelay: `${w.delay}s` }}
-              >
-                <WalkerSvg color={w.color} className="w-7 h-14" />
+        {/* Animated street scene — 220px tall, layered */}
+        <div className="street-scene relative w-full mt-8" style={{ height: "220px" }}>
+          {/* LAYER 1 — building silhouettes */}
+          <svg
+            className="absolute bottom-[155px] left-0 w-full"
+            style={{ zIndex: 1, height: "70px" }}
+            viewBox="0 0 1200 70"
+            preserveAspectRatio="none"
+          >
+            <path
+              fill="#0d1140"
+              d="M0,70 L0,40 L60,40 L60,20 L120,20 L120,45 L180,45 L180,15 L240,15 L240,35 L300,35 L300,5 L360,5 L360,30 L420,30 L420,18 L500,18 L500,42 L560,42 L560,12 L620,12 L620,38 L700,38 L700,22 L780,22 L780,8 L840,8 L840,32 L900,32 L900,16 L980,16 L980,40 L1060,40 L1060,24 L1140,24 L1140,44 L1200,44 L1200,70 Z"
+            />
+          </svg>
+
+          {/* LAYER 3 — Road */}
+          <div
+            className="absolute bottom-0 left-0 right-0 overflow-hidden"
+            style={{ height: "100px", background: "#12153a", borderTop: "3px solid #333", zIndex: 2 }}
+          >
+            {/* animated dashed center line */}
+            <div className="absolute left-0 right-0 road-dashes" style={{ top: "50%", height: "4px", zIndex: 3 }} />
+
+            {/* BUS — R→L */}
+            <img
+              src={busPng}
+              alt=""
+              className="street-bus absolute"
+              style={{ bottom: "8px", height: "110px", width: "auto", zIndex: 4 }}
+            />
+            {/* CNG — L→R */}
+            <img
+              src={cngPng}
+              alt=""
+              className="street-cng absolute"
+              style={{ bottom: "8px", height: "80px", width: "auto", zIndex: 5 }}
+            />
+            {/* RICKSHAW — L→R */}
+            <img
+              src={rickshawPng}
+              alt=""
+              className="street-rickshaw absolute"
+              style={{ bottom: "8px", height: "90px", width: "auto", zIndex: 5 }}
+            />
+          </div>
+
+          {/* LAYER 2 — Sidewalk */}
+          <div
+            className="absolute left-0 right-0 overflow-visible"
+            style={{
+              bottom: "100px",
+              height: "55px",
+              background: "#2a2f6e",
+              borderTop: "2px solid rgba(245,200,0,0.15)",
+              zIndex: 6,
+            }}
+          >
+            {/* STREETLAMPS */}
+            {[15, 40, 65, 90].map((leftPct) => (
+              <div key={leftPct} className="absolute" style={{ left: `${leftPct}%`, bottom: "0", zIndex: 7 }}>
+                {/* glow */}
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    left: "-90px",
+                    bottom: "-30px",
+                    width: "200px",
+                    height: "120px",
+                    background: "radial-gradient(ellipse at center, rgba(255,180,60,0.18), transparent 70%)",
+                  }}
+                />
+                {/* pole */}
+                <div style={{ width: "3px", height: "60px", background: "#555" }} />
+                {/* arm */}
+                <div style={{ position: "absolute", top: "0", right: "3px", width: "26px", height: "3px", background: "#555" }} />
+                {/* bulb */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-5px",
+                    right: "26px",
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "50%",
+                    background: "#ffcc66",
+                    boxShadow: "0 0 14px 4px rgba(255,180,60,0.7)",
+                  }}
+                />
               </div>
             ))}
-          </div>
-          {/* Road */}
-          <div className="absolute top-16 left-0 right-0 bottom-0 bg-[#0a0d2e] overflow-hidden">
-            {/* dashed center line */}
-            <div className="absolute top-1/2 left-0 right-0 h-1 -translate-y-1/2 flex gap-4">
-              {Array.from({ length: 40 }).map((_, i) => (
-                <div key={i} className="w-12 h-1 bg-yellow-street shrink-0" />
-              ))}
-            </div>
-            {/* Vehicles — CNG L→R, Rickshaw L→R (slower), Bus R→L */}
-            <div className="absolute bottom-2 left-0" style={{ animation: "drive-right 16s linear infinite", animationDelay: "-2s" }}>
-              <CNGSvg className="w-32 h-24" />
-            </div>
-            <div className="absolute bottom-2 left-0" style={{ animation: "drive-right 26s linear infinite", animationDelay: "-12s" }}>
-              <RickshawSvg className="w-36 h-24" />
-            </div>
-            <div className="absolute bottom-3 left-0" style={{ animation: "drive-left 22s linear infinite", animationDelay: "-6s" }}>
-              <BusSvg className="w-48 h-24" />
+
+            {/* WALKERS */}
+            {walkerDelays.map((d, i) => (
+              <img
+                key={i}
+                src={walkersPng}
+                alt=""
+                className="street-walkers absolute hidden-on-mobile-extra"
+                style={{
+                  bottom: `${i * 4}px`,
+                  height: "72px",
+                  width: "auto",
+                  zIndex: 8,
+                  animationDelay: `${d}s`,
+                }}
+                data-walker-index={i}
+              />
+            ))}
+
+            {/* POLICEMAN + traffic light */}
+            <div className="absolute" style={{ left: "38%", bottom: "0", zIndex: 10 }}>
+              {/* Traffic light */}
+              <div className="absolute" style={{ left: "78px", bottom: "0", zIndex: 9 }}>
+                <div style={{ width: "4px", height: "80px", background: "#555" }} />
+                <div style={{ position: "absolute", top: "0", left: "4px", width: "40px", height: "4px", background: "#555" }} />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "8px",
+                    left: "32px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "3px",
+                    background: "#222",
+                    padding: "3px",
+                    borderRadius: "3px",
+                  }}
+                >
+                  <div className="tl-red" style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#5a1a1a" }} />
+                  <div className="tl-yellow" style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#5a4a1a" }} />
+                  <div className="tl-green" style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#1a4a1a" }} />
+                </div>
+              </div>
+              <img src={policemanPng} alt="" className="policeman-img" style={{ height: "95px", width: "auto", display: "block" }} />
             </div>
           </div>
         </div>
