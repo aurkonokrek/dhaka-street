@@ -4,7 +4,7 @@ import logo from "@/assets/dhaka-street-logo.jpg";
 import busPng from "@/assets/bus.png";
 import cngPng from "@/assets/cng.png";
 import rickshawPng from "@/assets/rickshaw.png";
-import walkersPng from "@/assets/walkers.png";
+
 import policemanPng from "@/assets/policeman.png";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import {
@@ -164,7 +164,7 @@ function Index() {
   const [activeTab, setActiveTab] = useState("Street Bites");
   
 
-  const walkerDelays = [0, -8, -15];
+  
 
   const [activeSection, setActiveSection] = useState<string>("about");
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -414,23 +414,22 @@ function Index() {
               </div>
             ))}
 
-            {/* WALKERS */}
-            {walkerDelays.map((d, i) => (
-              <img
-                key={i}
-                src={walkersPng}
-                alt=""
-                className="street-walkers absolute hidden-on-mobile-extra"
-                style={{
-                  bottom: `${i * 4}px`,
-                  height: "72px",
-                  width: "auto",
-                  zIndex: 8,
-                  animationDelay: `${d}s`,
-                }}
-                data-walker-index={i}
-              />
-            ))}
+            {/* WALKERS — animated GIFs */}
+            <div className="walker-wrap w1">
+              <img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" />
+            </div>
+            <div className="walker-wrap w2">
+              <img src="/walkers/walker2.gif" className="walker-char" alt="walker" loading="eager" />
+            </div>
+            <div className="walker-wrap w3">
+              <img src="/walkers/walker3.gif" className="walker-char" alt="walker" loading="eager" />
+            </div>
+            <div className="walker-wrap w4">
+              <img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" />
+            </div>
+            <div className="walker-wrap w5">
+              <img src="/walkers/walker3.gif" className="walker-char" alt="walker" loading="eager" />
+            </div>
 
             {/* POLICEMAN + traffic light */}
             <div className="absolute" style={{ left: "38%", bottom: "0", zIndex: 10 }}>
