@@ -7,6 +7,8 @@ import {
   RickshawSvg,
   BusSvg,
   WalkerSvg,
+  TrafficPoliceSvg,
+  MoonSvg,
   ShingaraSvg,
   ChaiSvg,
   MuriSvg,
