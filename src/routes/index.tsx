@@ -166,7 +166,7 @@ function Index() {
 
   const walkerDelays = [0, -8, -15];
 
-  const [activeSection, setActiveSection] = useState<string>("story");
+  const [activeSection, setActiveSection] = useState<string>("about");
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -177,7 +177,7 @@ function Index() {
   }, [menuOpen]);
 
   useEffect(() => {
-    const sections = document.querySelectorAll("section[id]");
+    const sections = document.querySelectorAll("#about, #menu, #moments, #contact");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -186,7 +186,7 @@ function Index() {
           }
         });
       },
-      { threshold: 0.4, rootMargin: "-80px 0px -40% 0px" }
+      { threshold: 0.15, rootMargin: "-80px 0px -35% 0px" }
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
