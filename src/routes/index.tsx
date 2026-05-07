@@ -518,7 +518,7 @@ function Index() {
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center reveal">
             <span className="text-yellow-street uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>The Menu</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3">Order Something.</h2>
+            <h2 className="section-title font-display text-5xl md:text-7xl mt-3">Order Something.</h2>
             <p className="mt-4 text-white/70 max-w-xl mx-auto" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>
               You won't regret it.
             </p>
