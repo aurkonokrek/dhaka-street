@@ -474,31 +474,31 @@ h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
 /* === Animated GIF walkers === */
 .walker-wrap {
   position: absolute;
-  bottom: 93px;
+  bottom: 0;
   animation: walkAcross linear infinite;
-  z-index: 8;
+  z-index: 7;
 }
 .walker-char {
-  height: 75px;
+  height: 60px;
   width: auto;
   display: block;
 }
 .w1 { animation-duration: 20s; animation-delay: 0s; }
-.w2 { animation-duration: 25s; animation-delay: -6s; bottom: 96px; }
-.w3 { animation-duration: 18s; animation-delay: -13s; bottom: 91px; }
+.w2 { animation-duration: 25s; animation-delay: -6s; }
+.w3 { animation-duration: 18s; animation-delay: -13s; }
 .w4 { animation-duration: 22s; animation-delay: -18s; }
-.w5 { animation-duration: 28s; animation-delay: -9s; bottom: 94px; }
+.w5 { animation-duration: 28s; animation-delay: -9s; }
 
 @keyframes walkAcross {
   from { transform: translateX(-200px); }
   to   { transform: translateX(110vw); }
 }
 
-.w2 .walker-char { height: 68px; filter: brightness(0.85); }
-.w4 .walker-char { height: 72px; filter: brightness(0.9); }
-.w5 .walker-char { height: 65px; filter: brightness(0.8); }
+.w2 .walker-char { filter: brightness(0.85); }
+.w4 .walker-char { filter: brightness(0.9); }
+.w5 .walker-char { filter: brightness(0.8); }
 
 @media (max-width: 767px) {
   .walker-wrap.w3, .walker-wrap.w5 { display: none; }
-  .walker-char { height: 55px !important; }
+  .walker-char { height: 50px !important; }
 }
