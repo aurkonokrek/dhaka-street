@@ -255,7 +255,7 @@
 /* Mobile responsive */
 @media (max-width: 767px) {
   .street-bus { display: none; }
-  .street-cng, .street-rickshaw { transform: scale(0.65); transform-origin: bottom left; }
+  .street-cng { height: 52px !important; } .street-rickshaw { height: 58px !important; }
   .street-walkers[data-walker-index="1"],
   .street-walkers[data-walker-index="2"] { display: none; }
   .policeman-img { height: 70px !important; }
