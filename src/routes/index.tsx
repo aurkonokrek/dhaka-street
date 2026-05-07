@@ -149,23 +149,6 @@ const MENU_TABS: Record<string, { name: string; price: string }[]> = {
   ],
 };
 
-const REVIEWS = [
-  {
-    name: "Tahmid R.",
-    school: "BUET",
-    text: "The Naga Challenger broke me — in a good way. Dudh Cha refill loop was unmatched. New adda spot fixed.",
-  },
-  {
-    name: "Anika S.",
-    school: "North South University",
-    text: "Loaded Vibe Box for the squad, Cheesy Shingara for the soul. Walls are art, vibe is straight Dhaka.",
-  },
-  {
-    name: "Rifat H.",
-    school: "Dhaka University",
-    text: "Felt like the street walked into the restaurant. Wings hit, cha hit, conversation hit harder.",
-  },
-];
 
 function Index() {
   useScrollReveal();
