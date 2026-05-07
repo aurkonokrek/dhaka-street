@@ -610,7 +610,7 @@ function Index() {
             <div className="font-bangla text-yellow-street text-sm" style={{ letterSpacing: "0.04em" }}>
               আমাদের মানুষ
             </div>
-            <h2 className="font-display text-white text-5xl md:text-7xl mt-3">Real People. Real Vibe.</h2>
+            <h2 className="section-title font-display text-white text-5xl md:text-7xl mt-3">Real People. Real Vibe.</h2>
           </div>
 
           {/* Filter pills */}
