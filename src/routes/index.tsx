@@ -703,7 +703,7 @@ function Index() {
             <div className="font-bangla text-yellow-street text-sm" style={{ letterSpacing: "0.04em" }}>
               আজকে যাবি নাকি?
             </div>
-            <h2 className="font-display text-white mt-3 leading-[0.9]" style={{ fontSize: "clamp(56px, 12vw, 130px)" }}>
+            <h2 className="section-title font-display text-white mt-3 leading-[0.9]" style={{ fontSize: "clamp(56px, 12vw, 130px)" }}>
               AJKE <span className="text-yellow-street">JABI</span> NAKI?
             </h2>
             <p className="text-white/50 mt-6 max-w-2xl mx-auto" style={{ fontFamily: "'Space Mono', monospace", fontSize: "13px", lineHeight: 1.8 }}>
