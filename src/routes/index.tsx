@@ -209,26 +209,69 @@ function Index() {
             <span className="font-display text-2xl text-yellow-street">Dhaka Street</span>
           </a>
           <div className="hidden md:flex items-center gap-8">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="uppercase hover:text-yellow-street transition-colors" style={{ fontSize: "12px", letterSpacing: "0.12em" }}>
-                {n.label}
-              </a>
-            ))}
+            {NAV.map((n) => {
+              const isActive = activeSection === n.ref;
+              return (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  data-ref={n.ref}
+                  className="relative uppercase transition-colors duration-200"
+                  style={{
+                    fontSize: "12px",
+                    letterSpacing: "0.12em",
+                    color: isActive ? "#F5C800" : "rgba(255,255,255,0.6)",
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = "#F5C800"; }}
+                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "rgba(255,255,255,0.6)"; }}
+                >
+                  {n.label}
+                  {isActive && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        bottom: "-8px",
+                        transform: "translateX(-50%)",
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: "#F5C800",
+                      }}
+                    />
+                  )}
+                </a>
+              );
+            })}
           </div>
-          <a
-            href={WHATSAPP}
-            target="_blank"
-            rel="noreferrer"
-            className="font-display bg-whatsapp text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:scale-105 transition-transform"
-            style={{ letterSpacing: "0.04em" }}
-          >
-            <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
-              <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
-            </svg>
-            WhatsApp
-          </a>
         </div>
       </nav>
+
+      {/* STICKY FLOATING BUTTONS */}
+      <div className="sticky-buttons">
+        <button
+          aria-label="Scroll to top"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="scroll-top-btn"
+          style={{ opacity: showScrollTop ? 1 : 0, pointerEvents: showScrollTop ? "auto" : "none" }}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#F5C800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 15 12 9 18 15" />
+          </svg>
+        </button>
+        <a
+          href={WHATSAPP}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="WhatsApp"
+          className="wa-sticky"
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+            <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
+          </svg>
+        </a>
+      </div>
 
       {/* HERO */}
       <section id="top" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
