@@ -177,19 +177,27 @@ function Index() {
   }, [menuOpen]);
 
   useEffect(() => {
-    const sections = document.querySelectorAll("#about, #menu, #moments, #contact");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "-80px 0px -35% 0px" }
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
+    const sectionIds = ["about", "menu", "moments", "contact"];
+    const navHeight = 90;
+
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      let current = "";
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+        if (!section) return;
+        const top = section.offsetTop - navHeight - 100;
+        const bottom = top + section.offsetHeight;
+        if (scrollY >= top && scrollY < bottom) {
+          current = id;
+        }
+      });
+      if (current) setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
