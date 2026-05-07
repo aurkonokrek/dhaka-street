@@ -195,3 +195,68 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* === Street scene PNG animations === */
+@keyframes street-bus {
+  0%   { transform: translateX(110vw); }
+  100% { transform: translateX(-400px); }
+}
+@keyframes street-cng {
+  0%   { transform: translateX(-250px); }
+  100% { transform: translateX(110vw); }
+}
+@keyframes street-rickshaw {
+  0%   { transform: translateX(-300px); }
+  100% { transform: translateX(110vw); }
+}
+@keyframes street-walkers {
+  0%   { transform: translateX(-500px); }
+  100% { transform: translateX(110vw); }
+}
+.street-bus { animation: street-bus 18s linear infinite; animation-delay: 0s; }
+.street-cng { animation: street-cng 12s linear infinite; animation-delay: -4s; }
+.street-rickshaw { animation: street-rickshaw 16s linear infinite; animation-delay: -9s; }
+.street-walkers { animation: street-walkers 22s linear infinite; }
+
+/* Animated road dashes */
+.road-dashes {
+  background-image: repeating-linear-gradient(
+    to right,
+    #F5C800 0,
+    #F5C800 30px,
+    transparent 30px,
+    transparent 60px
+  );
+  animation: road-dash-move 0.8s linear infinite;
+}
+@keyframes road-dash-move {
+  from { background-position: 0 0; }
+  to   { background-position: -60px 0; }
+}
+
+/* Traffic light cycle: red 3s, yellow 1s, green 3s = 7s total */
+@keyframes tl-red-cycle {
+  0%, 42.85% { background: #ff3b3b; box-shadow: 0 0 8px 2px rgba(255,59,59,0.7); }
+  42.86%, 100% { background: #5a1a1a; box-shadow: none; }
+}
+@keyframes tl-yellow-cycle {
+  0%, 42.85% { background: #5a4a1a; box-shadow: none; }
+  42.86%, 57.13% { background: #ffd23b; box-shadow: 0 0 8px 2px rgba(255,210,59,0.7); }
+  57.14%, 100% { background: #5a4a1a; box-shadow: none; }
+}
+@keyframes tl-green-cycle {
+  0%, 57.13% { background: #1a4a1a; box-shadow: none; }
+  57.14%, 100% { background: #3bff5a; box-shadow: 0 0 8px 2px rgba(59,255,90,0.7); }
+}
+.tl-red    { animation: tl-red-cycle 7s linear infinite; }
+.tl-yellow { animation: tl-yellow-cycle 7s linear infinite; }
+.tl-green  { animation: tl-green-cycle 7s linear infinite; }
+
+/* Mobile responsive */
+@media (max-width: 767px) {
+  .street-bus { display: none; }
+  .street-cng { height: 52px !important; } .street-rickshaw { height: 58px !important; }
+  .street-walkers[data-walker-index="1"],
+  .street-walkers[data-walker-index="2"] { display: none; }
+  .policeman-img { height: 70px !important; }
+}
