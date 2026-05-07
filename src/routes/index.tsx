@@ -274,7 +274,7 @@ function Index() {
       </div>
 
       {/* HERO */}
-      <section id="top" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
+      <section id="hero" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
         {/* Star field */}
         <div className="absolute inset-0 star-field pointer-events-none" />
         {/* String lights along top */}
