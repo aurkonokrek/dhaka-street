@@ -479,26 +479,37 @@ h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
   z-index: 7;
 }
 .walker-char {
-  height: 60px;
   width: auto;
   display: block;
 }
-.w1 { animation-duration: 20s; animation-delay: 0s; }
-.w2 { animation-duration: 25s; animation-delay: -6s; }
-.w3 { animation-duration: 18s; animation-delay: -13s; }
-.w4 { animation-duration: 22s; animation-delay: -18s; }
-.w5 { animation-duration: 28s; animation-delay: -9s; }
 
 @keyframes walkAcross {
-  from { transform: translateX(-200px); }
+  from { transform: translateX(-220px); }
   to   { transform: translateX(110vw); }
 }
 
-.w2 .walker-char { filter: brightness(0.85); }
-.w4 .walker-char { filter: brightness(0.9); }
-.w5 .walker-char { filter: brightness(0.8); }
+.w1  { animation-duration: 20s; animation-delay: 0s;   }
+.w2  { animation-duration: 24s; animation-delay: -5s;  }
+.w3  { animation-duration: 18s; animation-delay: -10s; }
+.w4  { animation-duration: 22s; animation-delay: -15s; }
+.w5  { animation-duration: 26s; animation-delay: -3s;  }
+.w6  { animation-duration: 21s; animation-delay: -8s;  }
+.w7  { animation-duration: 19s; animation-delay: -13s; }
+.w8  { animation-duration: 23s; animation-delay: -18s; }
+.w9  { animation-duration: 28s; animation-delay: -7s;  }
+.w10 { animation-duration: 25s; animation-delay: -12s; }
+.w11 { animation-duration: 17s; animation-delay: -20s; }
+.w12 { animation-duration: 30s; animation-delay: -2s;  }
 
-@media (max-width: 767px) {
-  .walker-wrap.w3, .walker-wrap.w5 { display: none; }
-  .walker-char { height: 50px !important; }
+.w1 .walker-char, .w2 .walker-char,
+.w3 .walker-char, .w4 .walker-char { height: 62px; }
+
+.w5 .walker-char, .w6 .walker-char,
+.w7 .walker-char, .w8 .walker-char { height: 56px; filter: brightness(0.88); }
+
+.w9 .walker-char, .w10 .walker-char,
+.w11 .walker-char, .w12 .walker-char { height: 50px; filter: brightness(0.75); }
+
+@media (max-width: 768px) {
+  .w7, .w8, .w9, .w10, .w11, .w12 { display: none; }
 }
