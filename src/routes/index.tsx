@@ -418,15 +418,15 @@ function Index() {
             <div className="walker-wrap w1"><img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" /></div>
             <div className="walker-wrap w2"><img src="/walkers/walker2.gif" className="walker-char" alt="walker" loading="eager" /></div>
             <div className="walker-wrap w3"><img src="/walkers/walker3.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w4"><img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w5"><img src="/walkers/walker2.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w6"><img src="/walkers/walker3.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w7"><img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w8"><img src="/walkers/walker2.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w9"><img src="/walkers/walker3.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w10"><img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w11"><img src="/walkers/walker2.gif" className="walker-char" alt="walker" loading="eager" /></div>
-            <div className="walker-wrap w12"><img src="/walkers/walker3.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w4"><img src="/walkers/walker4.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w5"><img src="/walkers/walker5.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w6"><img src="/walkers/walker6.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w7"><img src="/walkers/walker7.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w8"><img src="/walkers/walker8.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w9"><img src="/walkers/walker9.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w10"><img src="/walkers/walker4.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w11"><img src="/walkers/walker6.gif" className="walker-char" alt="walker" loading="eager" /></div>
+            <div className="walker-wrap w12"><img src="/walkers/walker8.gif" className="walker-char" alt="walker" loading="eager" /></div>
 
             {/* POLICEMAN + traffic light */}
             <div className="absolute" style={{ left: "38%", bottom: "0", zIndex: 10 }}>
