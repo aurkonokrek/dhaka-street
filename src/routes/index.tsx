@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
 const WHATSAPP = "https://wa.me/8801789977034";
 
 const NAV = [
-  { label: "Story", href: "#story", ref: "story" },
+  { label: "Story", href: "#about", ref: "about" },
   { label: "Menu", href: "#menu", ref: "menu" },
   { label: "Moments", href: "#moments", ref: "moments" },
   { label: "Contact", href: "#contact", ref: "contact" },
@@ -166,7 +166,7 @@ function Index() {
 
   const walkerDelays = [0, -8, -15];
 
-  const [activeSection, setActiveSection] = useState<string>("story");
+  const [activeSection, setActiveSection] = useState<string>("about");
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -177,7 +177,7 @@ function Index() {
   }, [menuOpen]);
 
   useEffect(() => {
-    const sections = document.querySelectorAll("section[id]");
+    const sections = document.querySelectorAll("#about, #menu, #moments, #contact");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -186,7 +186,7 @@ function Index() {
           }
         });
       },
-      { threshold: 0.4, rootMargin: "-80px 0px -40% 0px" }
+      { threshold: 0.15, rootMargin: "-80px 0px -35% 0px" }
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
@@ -204,7 +204,7 @@ function Index() {
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#212666]/80 border-b-2 border-yellow-street">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-          <a href="#top" className="flex items-center gap-3">
+          <a href="#hero" className="flex items-center gap-3">
             <img src={logo} alt="Dhaka Street Logo" className="w-11 h-11 rounded-full border-2 border-yellow-street" />
             <span className="font-display text-2xl text-yellow-street">Dhaka Street</span>
           </a>
@@ -274,7 +274,7 @@ function Index() {
       </div>
 
       {/* HERO */}
-      <section id="top" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
+      <section id="hero" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
         {/* Star field */}
         <div className="absolute inset-0 star-field pointer-events-none" />
         {/* String lights along top */}
@@ -293,7 +293,7 @@ function Index() {
           <div className="reveal inline-block mx-auto mb-6 font-bangla text-yellow-street text-sm sm:text-base" style={{ letterSpacing: "0.04em" }}>
             ✦ আড্ডা দাও। খাও। চলে যাও।
           </div>
-          <h1 className="reveal font-display text-yellow-street leading-[0.85]" style={{ fontSize: "clamp(60px, 14vw, 130px)" }}>
+          <h1 className="reveal hero-title font-display text-yellow-street leading-[0.85]" style={{ fontSize: "clamp(60px, 14vw, 130px)" }}>
             Dhaka
             <br />
             Street
@@ -455,11 +455,11 @@ function Index() {
       </section>
 
       {/* STORY */}
-      <section id="story" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
+      <section id="about" className="bg-cream text-indigo-deep py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="reveal">
             <span className="text-[#e8721c] uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Our Story</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3 leading-none">Born on the streets. Built for the adda.</h2>
+            <h2 className="section-title font-display text-5xl md:text-7xl mt-3 leading-none">Born on the streets. Built for the adda.</h2>
             <p className="mt-6 leading-[1.8]" style={{ fontSize: "0.875rem" }}>
               Dhaka Street didn't come from a business plan. It came from a city — the smell of shingara frying at 11pm, rickshaw bells at rush hour, and a cup of dudh cha that somehow fixes everything. We just put it all under one roof.
             </p>
@@ -518,7 +518,7 @@ function Index() {
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center reveal">
             <span className="text-yellow-street uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>The Menu</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3">Order Something.</h2>
+            <h2 className="section-title font-display text-5xl md:text-7xl mt-3">Order Something.</h2>
             <p className="mt-4 text-white/70 max-w-xl mx-auto" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>
               You won't regret it.
             </p>
@@ -610,7 +610,7 @@ function Index() {
             <div className="font-bangla text-yellow-street text-sm" style={{ letterSpacing: "0.04em" }}>
               আমাদের মানুষ
             </div>
-            <h2 className="font-display text-white text-5xl md:text-7xl mt-3">Real People. Real Vibe.</h2>
+            <h2 className="section-title font-display text-white text-5xl md:text-7xl mt-3">Real People. Real Vibe.</h2>
           </div>
 
           {/* Filter pills */}
@@ -659,7 +659,7 @@ function Index() {
             <div className="text-white/40 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px", letterSpacing: "0.22em" }}>
               Hear it from them.
             </div>
-            <h2 className="font-display text-white text-5xl md:text-7xl mt-3 leading-[0.95]">
+            <h2 className="video-title font-display text-white text-5xl md:text-7xl mt-3 leading-[0.95]">
               DON'T TAKE
               <br />
               <span className="text-yellow-street">OUR WORD</span> FOR IT.
@@ -703,7 +703,7 @@ function Index() {
             <div className="font-bangla text-yellow-street text-sm" style={{ letterSpacing: "0.04em" }}>
               আজকে যাবি নাকি?
             </div>
-            <h2 className="font-display text-white mt-3 leading-[0.9]" style={{ fontSize: "clamp(56px, 12vw, 130px)" }}>
+            <h2 className="section-title font-display text-white mt-3 leading-[0.9]" style={{ fontSize: "clamp(56px, 12vw, 130px)" }}>
               AJKE <span className="text-yellow-street">JABI</span> NAKI?
             </h2>
             <p className="text-white/50 mt-6 max-w-2xl mx-auto" style={{ fontFamily: "'Space Mono', monospace", fontSize: "13px", lineHeight: 1.8 }}>

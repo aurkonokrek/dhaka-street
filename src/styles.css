@@ -411,11 +411,12 @@
   box-shadow: 0 24px 50px rgba(200, 0, 0, 0.2);
 }
 
-/* === Hangyaboli hard drop shadow — only on large headings === */
+/* === Hangyaboli hard drop shadow — only on six specific headings === */
 h1, h2, h3, h4,
 .font-display,
 .section-title,
 .hero-title,
+.video-title,
 .cta-button,
 .brand-name,
 .card-title,
@@ -424,22 +425,35 @@ h1, h2, h3, h4,
   text-shadow: none;
 }
 
-h1,
-h2,
-.hero-title,
-.section-title {
+#hero .hero-title {
   text-shadow:
     3px 3px 0px rgba(0, 0, 0, 0.5),
-    5px 5px 0px rgba(0, 0, 0, 0.2);
+    6px 6px 0px rgba(0, 0, 0, 0.2);
 }
-
-h1.text-yellow-street,
-h2.text-yellow-street,
-.hero-title.text-yellow-street,
-.section-title.text-yellow-street {
+#about .section-title {
   text-shadow:
-    3px 3px 0px rgba(180, 100, 0, 0.6),
-    5px 5px 0px rgba(0, 0, 0, 0.25);
+    3px 3px 0px rgba(0, 0, 0, 0.4),
+    6px 6px 0px rgba(0, 0, 0, 0.15);
+}
+#menu .section-title {
+  text-shadow:
+    3px 3px 0px rgba(0, 0, 0, 0.5),
+    6px 6px 0px rgba(0, 0, 0, 0.2);
+}
+#moments .section-title {
+  text-shadow:
+    3px 3px 0px rgba(0, 0, 0, 0.4),
+    6px 6px 0px rgba(0, 0, 0, 0.15);
+}
+#moments .video-title {
+  text-shadow:
+    3px 3px 0px rgba(0, 0, 0, 0.5),
+    6px 6px 0px rgba(0, 0, 0, 0.2);
+}
+#contact .section-title {
+  text-shadow:
+    3px 3px 0px rgba(180, 100, 0, 0.5),
+    6px 6px 0px rgba(0, 0, 0, 0.2);
 }
 
 /* Space Mono — nav links and section tags bold, body 400 */
