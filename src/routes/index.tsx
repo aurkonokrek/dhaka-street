@@ -459,7 +459,7 @@ function Index() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="reveal">
             <span className="text-[#e8721c] uppercase font-semibold" style={{ fontSize: "11px", letterSpacing: "0.22em" }}>Our Story</span>
-            <h2 className="font-display text-5xl md:text-7xl mt-3 leading-none">Born on the streets. Built for the adda.</h2>
+            <h2 className="section-title font-display text-5xl md:text-7xl mt-3 leading-none">Born on the streets. Built for the adda.</h2>
             <p className="mt-6 leading-[1.8]" style={{ fontSize: "0.875rem" }}>
               Dhaka Street didn't come from a business plan. It came from a city — the smell of shingara frying at 11pm, rickshaw bells at rush hour, and a cup of dudh cha that somehow fixes everything. We just put it all under one roof.
             </p>
