@@ -37,19 +37,27 @@ export const Route = createFileRoute("/")({
 const WHATSAPP = "https://wa.me/8801789977034";
 
 const NAV = [
-  { label: "Story", href: "#story" },
-  { label: "Menu", href: "#menu" },
-  { label: "Moments", href: "#moments" },
-  { label: "Contact", href: "#contact" },
+  { label: "Story", href: "#story", ref: "story" },
+  { label: "Menu", href: "#menu", ref: "menu" },
+  { label: "Moments", href: "#moments", ref: "moments" },
+  { label: "Contact", href: "#contact", ref: "contact" },
 ];
 
-const HERO_FOODS = [
+type HeroFood = {
+  name: string;
+  desc: string;
+  price: string;
+  emoji?: string;
+  variant?: "naga";
+};
+
+const HERO_FOODS: HeroFood[] = [
   { emoji: "🥟", name: "SHINGARA", desc: "Classic Dhaka street crisp", price: "From BDT 50" },
   { emoji: "🍗", name: "DHAKA WINGS", desc: "6 pcs BBQ, Naga or Honey Mustard", price: "BDT 199" },
-  { emoji: "📦", name: "MEATBOX", desc: "Loaded chicken, sausage, kabab or vibe box", price: "From BDT 230" },
+  { emoji: "🥡", name: "MEATBOX", desc: "Loaded chicken, sausage, kabab or vibe box", price: "From BDT 230" },
   { emoji: "☕", name: "TONG DOKAN", desc: "Dudh Cha, Moroch Cha, Kaju Cha", price: "From BDT 30" },
   { emoji: "🍔", name: "DHAKA BURGER", desc: "Crispy to Double Patty Smashed", price: "From BDT 169" },
-  { emoji: "🫙", name: "MURIVERSE", desc: "Jhal Muri, Chanachur Makha, Alu Muri", price: "From BDT 50" },
+  { name: "NAGA SHINGARA", desc: "The spiciest thing on the street. Not for the weak.", price: "From BDT 50", variant: "naga" },
 ];
 
 const MENU_TABS: Record<string, { name: string; price: string }[]> = {
