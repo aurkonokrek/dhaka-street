@@ -39,7 +39,7 @@ const WHATSAPP = "https://wa.me/8801789977034";
 const NAV = [
   { label: "Story", href: "#story" },
   { label: "Menu", href: "#menu" },
-  { label: "Reviews", href: "#reviews" },
+  { label: "Moments", href: "#moments" },
   { label: "Contact", href: "#contact" },
 ];
 
