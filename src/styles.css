@@ -96,6 +96,43 @@
   background-size: 24px 24px;
 }
 
+/* Hero night gradient */
+.hero-night {
+  background: linear-gradient(to bottom, #212666 0%, #1a1e50 100%);
+}
+
+/* Star field */
+.star-field {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 55% 35%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 70% 70%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 80% 25%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 60% 8%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 33% 45%, rgba(255,255,255,0.4), transparent);
+}
+
+/* Fairy string lights along top */
+.string-lights {
+  background-image: radial-gradient(circle, #F5C800 1.5px, transparent 2px);
+  background-size: 32px 32px;
+  background-repeat: repeat-x;
+  background-position: top;
+  filter: drop-shadow(0 0 3px rgba(245, 200, 0, 0.8));
+}
+
+/* Streetlamp glow on sidewalk */
+.lamp-glow {
+  background-image:
+    radial-gradient(ellipse 120px 60px at 15% 50%, rgba(255,170,80,0.35), transparent 70%),
+    radial-gradient(ellipse 120px 60px at 50% 50%, rgba(255,170,80,0.35), transparent 70%),
+    radial-gradient(ellipse 120px 60px at 85% 50%, rgba(255,170,80,0.35), transparent 70%);
+}
+
 /* Animations */
 @keyframes float-slow {
   0%, 100% { transform: translateY(0); }
@@ -111,7 +148,17 @@
 }
 @keyframes drive-left {
   0% { transform: translateX(110vw) scaleX(-1); }
-  100% { transform: translateX(-20vw) scaleX(-1); }
+  100% { transform: translateX(-30vw) scaleX(-1); }
+}
+@keyframes food-rain {
+  0% { transform: translateY(-50px) translateX(0); opacity: 0; }
+  10% { opacity: var(--rain-opacity, 0.15); }
+  90% { opacity: var(--rain-opacity, 0.15); }
+  100% { transform: translateY(110vh) translateX(var(--drift, 30px)); opacity: 0; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }
 @keyframes walk {
   0% { transform: translateX(-10vw); }
