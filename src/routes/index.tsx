@@ -171,7 +171,7 @@ function Index() {
   useScrollReveal();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Street Bites");
-  const [submitted, setSubmitted] = useState(false);
+  
 
   const walkerDelays = [0, -8, -15];
 
