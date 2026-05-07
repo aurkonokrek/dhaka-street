@@ -2,7 +2,15 @@
 @source "../src";
 @import "tw-animate-css";
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Anek+Bangla:wdth,wght@75,300;75,400;75,500;75,700&display=swap');
+
+@font-face {
+  font-family: 'Hangyaboli';
+  src: url('/fonts/Hangyaboli.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -35,9 +43,9 @@
   --color-yellow-street: var(--yellow-street);
   --color-cream: var(--cream);
   --color-whatsapp: var(--whatsapp);
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-bangla: 'Hind Siliguri', sans-serif;
+  --font-display: 'Hangyaboli', 'Space Mono', monospace;
+  --font-body: 'Space Mono', monospace;
+  --font-bangla: 'Anek Bangla', 'Space Mono', sans-serif;
 }
 
 :root {
@@ -77,13 +85,30 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.8;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: 0.02em;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    line-height: 1;
+  }
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    text-transform: none;
   }
   .font-bangla {
     font-family: var(--font-bangla);
+    font-weight: 500;
+    font-style: normal;
+  }
+  .font-bangla-heading {
+    font-family: var(--font-bangla);
+    font-weight: 700;
   }
   html {
     scroll-behavior: smooth;
