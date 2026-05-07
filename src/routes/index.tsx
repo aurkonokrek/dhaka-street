@@ -293,7 +293,7 @@ function Index() {
           <div className="reveal inline-block mx-auto mb-6 font-bangla text-yellow-street text-sm sm:text-base" style={{ letterSpacing: "0.04em" }}>
             ✦ আড্ডা দাও। খাও। চলে যাও।
           </div>
-          <h1 className="reveal font-display text-yellow-street leading-[0.85]" style={{ fontSize: "clamp(60px, 14vw, 130px)" }}>
+          <h1 className="reveal hero-title font-display text-yellow-street leading-[0.85]" style={{ fontSize: "clamp(60px, 14vw, 130px)" }}>
             Dhaka
             <br />
             Street
