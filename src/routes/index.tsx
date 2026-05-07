@@ -166,12 +166,38 @@ function Index() {
 
   const walkerDelays = [0, -8, -15];
 
+  const [activeSection, setActiveSection] = useState<string>("story");
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
   useEffect(() => {
     if (menuOpen) {
       const el = document.getElementById("full-menu");
       el?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [menuOpen]);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.4, rootMargin: "-80px 0px -40% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollTop(window.scrollY > 300);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
