@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
 const WHATSAPP = "https://wa.me/8801789977034";
 
 const NAV = [
-  { label: "Story", href: "#story", ref: "story" },
+  { label: "Story", href: "#about", ref: "about" },
   { label: "Menu", href: "#menu", ref: "menu" },
   { label: "Moments", href: "#moments", ref: "moments" },
   { label: "Contact", href: "#contact", ref: "contact" },
