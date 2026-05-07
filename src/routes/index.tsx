@@ -659,7 +659,7 @@ function Index() {
             <div className="text-white/40 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px", letterSpacing: "0.22em" }}>
               Hear it from them.
             </div>
-            <h2 className="font-display text-white text-5xl md:text-7xl mt-3 leading-[0.95]">
+            <h2 className="video-title font-display text-white text-5xl md:text-7xl mt-3 leading-[0.95]">
               DON'T TAKE
               <br />
               <span className="text-yellow-street">OUR WORD</span> FOR IT.
