@@ -37,19 +37,27 @@ export const Route = createFileRoute("/")({
 const WHATSAPP = "https://wa.me/8801789977034";
 
 const NAV = [
-  { label: "Story", href: "#story" },
-  { label: "Menu", href: "#menu" },
-  { label: "Moments", href: "#moments" },
-  { label: "Contact", href: "#contact" },
+  { label: "Story", href: "#story", ref: "story" },
+  { label: "Menu", href: "#menu", ref: "menu" },
+  { label: "Moments", href: "#moments", ref: "moments" },
+  { label: "Contact", href: "#contact", ref: "contact" },
 ];
 
-const HERO_FOODS = [
+type HeroFood = {
+  name: string;
+  desc: string;
+  price: string;
+  emoji?: string;
+  variant?: "naga";
+};
+
+const HERO_FOODS: HeroFood[] = [
   { emoji: "🥟", name: "SHINGARA", desc: "Classic Dhaka street crisp", price: "From BDT 50" },
   { emoji: "🍗", name: "DHAKA WINGS", desc: "6 pcs BBQ, Naga or Honey Mustard", price: "BDT 199" },
-  { emoji: "📦", name: "MEATBOX", desc: "Loaded chicken, sausage, kabab or vibe box", price: "From BDT 230" },
+  { emoji: "🥡", name: "MEATBOX", desc: "Loaded chicken, sausage, kabab or vibe box", price: "From BDT 230" },
   { emoji: "☕", name: "TONG DOKAN", desc: "Dudh Cha, Moroch Cha, Kaju Cha", price: "From BDT 30" },
   { emoji: "🍔", name: "DHAKA BURGER", desc: "Crispy to Double Patty Smashed", price: "From BDT 169" },
-  { emoji: "🫙", name: "MURIVERSE", desc: "Jhal Muri, Chanachur Makha, Alu Muri", price: "From BDT 50" },
+  { name: "NAGA SHINGARA", desc: "The spiciest thing on the street. Not for the weak.", price: "From BDT 50", variant: "naga" },
 ];
 
 const MENU_TABS: Record<string, { name: string; price: string }[]> = {
@@ -158,12 +166,38 @@ function Index() {
 
   const walkerDelays = [0, -8, -15];
 
+  const [activeSection, setActiveSection] = useState<string>("story");
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
   useEffect(() => {
     if (menuOpen) {
       const el = document.getElementById("full-menu");
       el?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [menuOpen]);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.4, rootMargin: "-80px 0px -40% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollTop(window.scrollY > 300);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -175,26 +209,69 @@ function Index() {
             <span className="font-display text-2xl text-yellow-street">Dhaka Street</span>
           </a>
           <div className="hidden md:flex items-center gap-8">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="uppercase hover:text-yellow-street transition-colors" style={{ fontSize: "12px", letterSpacing: "0.12em" }}>
-                {n.label}
-              </a>
-            ))}
+            {NAV.map((n) => {
+              const isActive = activeSection === n.ref;
+              return (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  data-ref={n.ref}
+                  className="relative uppercase transition-colors duration-200"
+                  style={{
+                    fontSize: "12px",
+                    letterSpacing: "0.12em",
+                    color: isActive ? "#F5C800" : "rgba(255,255,255,0.6)",
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = "#F5C800"; }}
+                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "rgba(255,255,255,0.6)"; }}
+                >
+                  {n.label}
+                  {isActive && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        bottom: "-8px",
+                        transform: "translateX(-50%)",
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: "#F5C800",
+                      }}
+                    />
+                  )}
+                </a>
+              );
+            })}
           </div>
-          <a
-            href={WHATSAPP}
-            target="_blank"
-            rel="noreferrer"
-            className="font-display bg-whatsapp text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:scale-105 transition-transform"
-            style={{ letterSpacing: "0.04em" }}
-          >
-            <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
-              <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
-            </svg>
-            WhatsApp
-          </a>
         </div>
       </nav>
+
+      {/* STICKY FLOATING BUTTONS */}
+      <div className="sticky-buttons">
+        <button
+          aria-label="Scroll to top"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="scroll-top-btn"
+          style={{ opacity: showScrollTop ? 1 : 0, pointerEvents: showScrollTop ? "auto" : "none" }}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#F5C800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 15 12 9 18 15" />
+          </svg>
+        </button>
+        <a
+          href={WHATSAPP}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="WhatsApp"
+          className="wa-sticky"
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+            <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.514 5.26l-.999 3.648 3.974-1.607z" />
+          </svg>
+        </a>
+      </div>
 
       {/* HERO */}
       <section id="top" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
@@ -448,17 +525,29 @@ function Index() {
           </div>
 
           <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {HERO_FOODS.map((f) => (
-              <div
-                key={f.name}
-                className="reveal group relative bg-[#212666] rounded-2xl p-8 border-t-4 border-transparent hover:border-yellow-street transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(245,200,0,0.3)]"
-              >
-                <div className="text-6xl animate-float-slow inline-block">{f.emoji}</div>
-                <h3 className="font-display text-3xl mt-4 text-yellow-street">{f.name}</h3>
-                <p className="mt-2 text-white/70" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>{f.desc}</p>
-                <p className="font-display mt-4 text-white" style={{ letterSpacing: "0.04em" }}>{f.price}</p>
-              </div>
-            ))}
+            {HERO_FOODS.map((f) => {
+              const isNaga = f.variant === "naga";
+              return (
+                <div
+                  key={f.name}
+                  className={`reveal group relative bg-[#212666] rounded-2xl p-8 border-t-4 border-transparent transition-all duration-300 hover:-translate-y-2 ${
+                    isNaga ? "naga-card" : "hover:border-yellow-street hover:shadow-[0_20px_40px_-15px_rgba(245,200,0,0.3)]"
+                  }`}
+                >
+                  {isNaga ? (
+                    <div className="naga-icon animate-float-slow">
+                      <span className="icon-mountain">⛰</span>
+                      <span className="icon-shingara">🥟</span>
+                    </div>
+                  ) : (
+                    <div className="text-6xl animate-float-slow inline-block">{f.emoji}</div>
+                  )}
+                  <h3 className="font-display text-3xl mt-4 text-yellow-street">{f.name}</h3>
+                  <p className="mt-2 text-white/70" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>{f.desc}</p>
+                  <p className="font-display mt-4 text-white" style={{ letterSpacing: "0.04em" }}>{f.price}</p>
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-12 text-center reveal">
