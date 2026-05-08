@@ -208,6 +208,37 @@ function Index() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Multi-layer parallax for the hero. Each element with [data-parallax-speed]
+  // is translated by (scrollY * speed). Lower speeds = farther background,
+  // higher speeds = closer foreground. rAF keeps it buttery smooth.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+    const layers = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-parallax-speed]")
+    );
+    if (!layers.length) return;
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      for (const el of layers) {
+        const speed = parseFloat(el.dataset.parallaxSpeed || "0");
+        el.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+      }
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* NAV */}
@@ -284,21 +315,32 @@ function Index() {
 
       {/* HERO */}
       <section id="hero" className="relative min-h-screen pt-24 pb-0 overflow-hidden hero-night flex flex-col">
-        {/* Star field */}
-        <div className="absolute inset-0 star-field pointer-events-none" />
-        {/* String lights along top */}
-        <div className="absolute top-16 left-0 right-0 h-2 string-lights opacity-80 pointer-events-none" />
-        {/* Crescent moon */}
-        <MoonSvg className="absolute top-24 right-10 sm:right-24 w-14 h-14 opacity-90 drop-shadow-[0_0_10px_rgba(245,200,0,0.4)]" />
-        {/* Dot grid */}
-        <div className="absolute inset-0 dot-grid opacity-60 pointer-events-none" />
-        {/* Floating background food */}
-        <ShingaraSvg className="absolute top-40 left-8 w-28 h-28 opacity-[0.10] animate-float-faint" />
-        <ChaiSvg className="absolute top-52 right-32 w-24 h-24 opacity-[0.10] animate-float-faint" />
-        <MuriSvg className="absolute bottom-72 left-20 w-28 h-28 opacity-[0.10] animate-float-faint" />
-        <WingSvg className="absolute top-1/2 right-1/4 w-24 h-24 opacity-[0.10] animate-float-faint" />
+        {/* PARALLAX LAYER 1 — far background (slowest) */}
+        <div className="absolute inset-0 star-field pointer-events-none" data-parallax-speed="0.15" />
+        {/* PARALLAX LAYER 2 — string lights (slow) */}
+        <div className="absolute top-16 left-0 right-0 h-2 string-lights opacity-80 pointer-events-none" data-parallax-speed="0.22" />
+        {/* PARALLAX LAYER 2 — Crescent moon (slow) */}
+        <div className="absolute top-24 right-10 sm:right-24 will-change-transform" data-parallax-speed="0.28">
+          <MoonSvg className="w-14 h-14 opacity-90 drop-shadow-[0_0_10px_rgba(245,200,0,0.4)]" />
+        </div>
+        {/* PARALLAX LAYER 3 — dot grid (mid) */}
+        <div className="absolute inset-0 dot-grid opacity-60 pointer-events-none" data-parallax-speed="0.35" />
+        {/* PARALLAX LAYER 4 — Floating midground food (faster) */}
+        <div className="absolute top-40 left-8 will-change-transform" data-parallax-speed="0.45">
+          <ShingaraSvg className="w-28 h-28 opacity-[0.10] animate-float-faint" />
+        </div>
+        <div className="absolute top-52 right-32 will-change-transform" data-parallax-speed="0.5">
+          <ChaiSvg className="w-24 h-24 opacity-[0.10] animate-float-faint" />
+        </div>
+        <div className="absolute bottom-72 left-20 will-change-transform" data-parallax-speed="0.55">
+          <MuriSvg className="w-28 h-28 opacity-[0.10] animate-float-faint" />
+        </div>
+        <div className="absolute top-1/2 right-1/4 will-change-transform" data-parallax-speed="0.6">
+          <WingSvg className="w-24 h-24 opacity-[0.10] animate-float-faint" />
+        </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center text-center">
+        {/* PARALLAX LAYER 5 — UI / Text (closest, moves fastest with scroll) */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center text-center" data-parallax-speed="0.18">
           <div className="reveal inline-block mx-auto mb-6 font-bangla text-yellow-street text-sm sm:text-base" style={{ letterSpacing: "0.04em" }}>
             ✦ আড্ডা দাও। খাও। চলে যাও।
           </div>
