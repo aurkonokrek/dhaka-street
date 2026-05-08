@@ -857,10 +857,31 @@ function Index() {
           </div>
           <div>
             <div className="font-display text-xl text-yellow-street mb-4">Follow Us</div>
-            <ul className="space-y-2 text-white/80 text-sm">
-              <li><a href="https://facebook.com/LifeAtDhakaStreet" target="_blank" rel="noreferrer" className="hover:text-yellow-street">facebook.com/LifeAtDhakaStreet</a></li>
-              <li><a href="https://instagram.com/lifeatdhakastreet" target="_blank" rel="noreferrer" className="hover:text-yellow-street">instagram.com/lifeatdhakastreet</a></li>
-              <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="hover:text-yellow-street">+88 01789-977034</a></li>
+            <ul className="space-y-3 text-white/80 text-sm">
+              <li>
+                <a href="https://facebook.com/LifeAtDhakaStreet" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-yellow-street group">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-yellow-street group-hover:text-[#181e55] transition-colors">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12H17l-.4 2.9h-2.3v7A10 10 0 0022 12z"/></svg>
+                  </span>
+                  Dhaka Street
+                </a>
+              </li>
+              <li>
+                <a href="https://instagram.com/lifeatdhakastreet" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-yellow-street group">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-yellow-street group-hover:text-[#181e55] transition-colors">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1C2.6 8.5 2.6 8.9 2.6 12s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1-.2-.5-.4-.9-.8-1.3-.4-.4-.8-.6-1.3-.8-.4-.2-1-.3-2.1-.4C15.5 4 15.1 4 12 4zm0 3.1a4.9 4.9 0 110 9.8 4.9 4.9 0 010-9.8zm0 1.8a3.1 3.1 0 100 6.2 3.1 3.1 0 000-6.2zm5.1-2.1a1.1 1.1 0 110 2.3 1.1 1.1 0 010-2.3z"/></svg>
+                  </span>
+                  lifeatdhakastreet
+                </a>
+              </li>
+              <li>
+                <a href="tel:+8801789977034" className="inline-flex items-center gap-2 hover:text-yellow-street group">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-yellow-street group-hover:text-[#181e55] transition-colors">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 013 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
+                  </span>
+                  +88 01789-977034
+                </a>
+              </li>
             </ul>
           </div>
         </div>
