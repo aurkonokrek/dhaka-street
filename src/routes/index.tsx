@@ -311,7 +311,7 @@ function Index() {
             ঢাকার স্বাদ। আমাদের আড্ডা।
           </p>
           <p className="reveal mt-4 max-w-xl mx-auto text-white/80 lowercase" style={{ fontSize: "0.875rem", lineHeight: 1.8 }}>
-            real food. no nonsense. just dhaka.
+            Life At Dhaka Street
           </p>
           <div className="reveal mt-10">
             <a
