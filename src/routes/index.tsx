@@ -427,6 +427,9 @@ function Index() {
               </div>
             ))}
 
+            {/* TONG DOKAN — rendered before walkers so they pass in front */}
+            <TongDokan className="tong-dokan" />
+
             {/* WALKERS — animated GIFs */}
             <div className="walker-wrap w1"><img src="/walkers/walker1.gif" className="walker-char" alt="walker" loading="eager" /></div>
             <div className="walker-wrap w2"><img src="/walkers/walker2.gif" className="walker-char" alt="walker" loading="eager" /></div>
