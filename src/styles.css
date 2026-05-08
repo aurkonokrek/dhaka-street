@@ -261,20 +261,26 @@
   animation-delay: -4s;
   z-index: 5;
 }
-.motorbike1 .bike-char { height: 75px; }
+.motorbike1 .bike-char { height: 58px; }
 .delivery1 {
   animation: bikeRightward 13s linear infinite;
   animation-delay: -8s;
   z-index: 5;
 }
-.delivery1 .bike-char { height: 68px; }
+.delivery1 .bike-char { height: 52px; }
 .bicycle1 {
   animation: bikeLeftward 16s linear infinite;
   animation-delay: -2s;
   z-index: 4;
 }
-.bicycle1 .bike-char { height: 72px; }
+.bicycle1 .bike-char { height: 50px; }
 .bicycle-flip { transform: scaleX(-1); }
+
+@media (max-width: 768px) {
+  .motorbike1 .bike-char { height: 44px; }
+  .delivery1  .bike-char { height: 40px; }
+  .bicycle1   .bike-char { height: 38px; }
+}
 
 @keyframes bikeRightward {
   from { transform: translateX(-200px); }
