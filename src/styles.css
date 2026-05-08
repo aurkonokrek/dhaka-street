@@ -566,10 +566,10 @@ h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
 /* ── TONG DOKAN (tea stall) ── */
 .tong-dokan {
   position: absolute;
-  right: 80px;
+  right: 60px;
   bottom: 93px;
-  z-index: 6;
-  width: 280px;
+  z-index: 3;
+  width: 160px;
   height: auto;
   pointer-events: none;
   animation: stallIdle 6s ease-in-out infinite;
