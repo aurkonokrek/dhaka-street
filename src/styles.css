@@ -257,17 +257,17 @@
   mix-blend-mode: screen;
 }
 .motorbike1 {
-  animation: bikeLeftward 10s linear infinite;
+  animation: bikeRightward 10s linear infinite;
   animation-delay: -4s;
   z-index: 5;
 }
-.motorbike1 .bike-char { height: 58px; transform: scaleX(-1); }
+.motorbike1 .bike-char { height: 58px; }
 .delivery1 {
-  animation: bikeLeftward 13s linear infinite;
+  animation: bikeRightward 13s linear infinite;
   animation-delay: -8s;
   z-index: 5;
 }
-.delivery1 .bike-char { height: 52px; transform: scaleX(-1); }
+.delivery1 .bike-char { height: 52px; }
 .bicycle1 {
   animation: bikeLeftward 16s linear infinite;
   animation-delay: -2s;
