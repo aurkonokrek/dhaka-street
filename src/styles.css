@@ -567,11 +567,12 @@ h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
 .tong-dokan {
   position: absolute;
   right: 60px;
-  bottom: 93px;
+  bottom: 0px;
   z-index: 6;
   width: 160px;
   height: auto;
   pointer-events: none;
+  transform: none;
   animation: stallIdle 6s ease-in-out infinite;
 }
 
