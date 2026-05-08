@@ -14,6 +14,7 @@ import {
   MuriSvg,
   WingSvg,
 } from "@/components/dhaka-svgs";
+import { TongDokan } from "@/components/tong-dokan";
 
 export const Route = createFileRoute("/")({
   head: () => ({
