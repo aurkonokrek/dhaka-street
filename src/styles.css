@@ -238,9 +238,9 @@
   0%   { transform: translateX(-500px); }
   100% { transform: translateX(110vw); }
 }
-.street-bus { animation: street-bus 18s linear infinite; animation-delay: 0s; }
-.street-cng { animation: street-cng 12s linear infinite; animation-delay: -4s; }
-.street-rickshaw { animation: street-rickshaw 16s linear infinite; animation-delay: -9s; }
+.street-bus { animation: street-bus 22s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -2s; will-change: transform; }
+.street-cng { animation: street-cng 16s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -6s; will-change: transform; }
+.street-rickshaw { animation: street-rickshaw 20s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -12s; will-change: transform; }
 .street-walkers { animation: street-walkers 22s linear infinite; }
 
 /* === Bikes on the road === */
