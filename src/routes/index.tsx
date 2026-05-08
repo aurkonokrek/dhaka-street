@@ -320,14 +320,24 @@ function Index() {
         {/* PARALLAX LAYER 2 — string lights (slow) */}
         <div className="absolute top-16 left-0 right-0 h-2 string-lights opacity-80 pointer-events-none" data-parallax-speed="0.22" />
         {/* PARALLAX LAYER 2 — Crescent moon (slow) */}
-        <MoonSvg className="absolute top-24 right-10 sm:right-24 w-14 h-14 opacity-90 drop-shadow-[0_0_10px_rgba(245,200,0,0.4)]" data-parallax-speed="0.28" />
+        <div className="absolute top-24 right-10 sm:right-24 will-change-transform" data-parallax-speed="0.28">
+          <MoonSvg className="w-14 h-14 opacity-90 drop-shadow-[0_0_10px_rgba(245,200,0,0.4)]" />
+        </div>
         {/* PARALLAX LAYER 3 — dot grid (mid) */}
         <div className="absolute inset-0 dot-grid opacity-60 pointer-events-none" data-parallax-speed="0.35" />
         {/* PARALLAX LAYER 4 — Floating midground food (faster) */}
-        <ShingaraSvg className="absolute top-40 left-8 w-28 h-28 opacity-[0.10] animate-float-faint" data-parallax-speed="0.45" />
-        <ChaiSvg className="absolute top-52 right-32 w-24 h-24 opacity-[0.10] animate-float-faint" data-parallax-speed="0.5" />
-        <MuriSvg className="absolute bottom-72 left-20 w-28 h-28 opacity-[0.10] animate-float-faint" data-parallax-speed="0.55" />
-        <WingSvg className="absolute top-1/2 right-1/4 w-24 h-24 opacity-[0.10] animate-float-faint" data-parallax-speed="0.6" />
+        <div className="absolute top-40 left-8 will-change-transform" data-parallax-speed="0.45">
+          <ShingaraSvg className="w-28 h-28 opacity-[0.10] animate-float-faint" />
+        </div>
+        <div className="absolute top-52 right-32 will-change-transform" data-parallax-speed="0.5">
+          <ChaiSvg className="w-24 h-24 opacity-[0.10] animate-float-faint" />
+        </div>
+        <div className="absolute bottom-72 left-20 will-change-transform" data-parallax-speed="0.55">
+          <MuriSvg className="w-28 h-28 opacity-[0.10] animate-float-faint" />
+        </div>
+        <div className="absolute top-1/2 right-1/4 will-change-transform" data-parallax-speed="0.6">
+          <WingSvg className="w-24 h-24 opacity-[0.10] animate-float-faint" />
+        </div>
 
         {/* PARALLAX LAYER 5 — UI / Text (closest, moves fastest with scroll) */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center text-center" data-parallax-speed="0.18">
