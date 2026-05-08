@@ -243,6 +243,48 @@
 .street-rickshaw { animation: street-rickshaw 16s linear infinite; animation-delay: -9s; }
 .street-walkers { animation: street-walkers 22s linear infinite; }
 
+/* === Bikes on the road === */
+.bike-wrap {
+  position: absolute;
+  bottom: 0;
+  z-index: 4;
+}
+.bike-char {
+  display: block;
+  width: auto;
+}
+.motorbike-img {
+  mix-blend-mode: screen;
+}
+.motorbike1 {
+  animation: bikeRightward 10s linear infinite;
+  animation-delay: -4s;
+  z-index: 5;
+}
+.motorbike1 .bike-char { height: 75px; }
+.delivery1 {
+  animation: bikeRightward 13s linear infinite;
+  animation-delay: -8s;
+  z-index: 5;
+}
+.delivery1 .bike-char { height: 68px; }
+.bicycle1 {
+  animation: bikeLeftward 16s linear infinite;
+  animation-delay: -2s;
+  z-index: 4;
+}
+.bicycle1 .bike-char { height: 72px; }
+.bicycle-flip { transform: scaleX(-1); }
+
+@keyframes bikeRightward {
+  from { transform: translateX(-200px); }
+  to   { transform: translateX(110vw); }
+}
+@keyframes bikeLeftward {
+  from { transform: translateX(110vw); }
+  to   { transform: translateX(-200px); }
+}
+
 /* Animated road dashes */
 .road-dashes {
   background-image: repeating-linear-gradient(

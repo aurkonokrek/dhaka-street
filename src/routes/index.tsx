@@ -367,6 +367,18 @@ function Index() {
               className="street-rickshaw absolute"
               style={{ bottom: "0px", height: "90px", width: "auto", zIndex: 5, display: "block" }}
             />
+            {/* MOTORBIKE — L→R */}
+            <div className="bike-wrap motorbike1">
+              <img src="/vehicles/Motorbike_png.png" className="bike-char motorbike-img" loading="eager" alt="" />
+            </div>
+            {/* DELIVERY BIKE — L→R */}
+            <div className="bike-wrap delivery1">
+              <img src="/vehicles/Bike_Delivery_Sticker_gif.gif" className="bike-char" loading="eager" alt="" />
+            </div>
+            {/* BICYCLE — R→L */}
+            <div className="bike-wrap bicycle1">
+              <img src="/vehicles/Bike_Bicycling_Sticker_gif.gif" className="bike-char bicycle-flip" loading="eager" alt="" />
+            </div>
           </div>
 
           {/* LAYER 2 — Sidewalk */}
