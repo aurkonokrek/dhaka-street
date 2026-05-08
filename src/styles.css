@@ -255,26 +255,27 @@
 }
 .motorbike-img {
   mix-blend-mode: screen;
+  height: 58px;
 }
 .motorbike1 {
-  animation: bikeRightward 10s linear infinite;
+  animation: bikeLeftward 10s linear infinite;
   animation-delay: -4s;
   z-index: 5;
 }
-.motorbike1 .bike-char { height: 58px; }
+.motorbike1 .bike-char { height: 58px; transform: none; }
 .delivery1 {
-  animation: bikeRightward 13s linear infinite;
+  animation: bikeLeftward 13s linear infinite;
   animation-delay: -8s;
   z-index: 5;
 }
-.delivery1 .bike-char { height: 52px; }
+.delivery1 .bike-char { height: 52px; transform: none; }
 .bicycle1 {
-  animation: bikeLeftward 16s linear infinite;
+  animation: bikeRightward 16s linear infinite;
   animation-delay: -2s;
   z-index: 4;
 }
 .bicycle1 .bike-char { height: 50px; }
-.bicycle-flip { transform: scaleX(-1); }
+.bicycle-flip { transform: none; }
 
 @media (max-width: 768px) {
   .motorbike1 .bike-char { height: 44px; }
