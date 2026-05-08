@@ -468,9 +468,6 @@ function Index() {
               <img src={policemanPng} alt="" className="policeman-img" style={{ height: "95px", width: "auto", display: "block" }} />
             </div>
           </div>
-
-          {/* TONG DOKAN — stationary tea stall on sidewalk */}
-          <TongDokan className="tong-dokan" />
         </div>
       </section>
 
