@@ -562,3 +562,74 @@ h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
 @media (max-width: 768px) {
   .w7, .w8, .w9, .w10, .w11, .w12 { display: none; }
 }
+
+/* ── TONG DOKAN (tea stall) ── */
+.tong-dokan {
+  position: absolute;
+  right: 80px;
+  bottom: 93px;
+  z-index: 6;
+  width: 280px;
+  height: auto;
+  pointer-events: none;
+  animation: stallIdle 6s ease-in-out infinite;
+}
+
+.bulb-glow {
+  animation: bulbFlicker 8s ease-in-out infinite;
+  transform-origin: center;
+}
+.bulb-ambient {
+  animation: ambientPulse 8s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes bulbFlicker {
+  0%, 90%, 100% { opacity: 1; }
+  91% { opacity: 0.3; }
+  92% { opacity: 1; }
+  94% { opacity: 0.5; }
+  95% { opacity: 1; }
+}
+@keyframes ambientPulse {
+  0%, 90%, 100% { opacity: 0.9; }
+  91% { opacity: 0.25; }
+  95% { opacity: 0.9; }
+}
+
+.cig-smoke {
+  animation: smokeDrift 3s ease-in-out infinite;
+  transform-origin: bottom;
+}
+@keyframes smokeDrift {
+  0%   { opacity: 0; transform: translateY(0) translateX(0); }
+  20%  { opacity: 1; }
+  80%  { opacity: 0.3; }
+  100% { opacity: 0; transform: translateY(-18px) translateX(4px); }
+}
+
+.steam-1 { animation: steamRise 2.5s ease-out infinite; }
+.steam-2 { animation: steamRise 2.5s ease-out infinite; animation-delay: 0.8s; }
+@keyframes steamRise {
+  0%   { opacity: 0; transform: translateY(0); }
+  25%  { opacity: 0.6; }
+  80%  { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.phone-screen { animation: screenPulse 4s ease-in-out infinite; }
+@keyframes screenPulse {
+  0%, 100% { opacity: 0.8; }
+  50%      { opacity: 0.4; }
+}
+
+@keyframes stallIdle {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-1.5px); }
+}
+
+@media (max-width: 768px) {
+  .tong-dokan {
+    width: 180px;
+    right: 20px;
+  }
+}
