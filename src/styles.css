@@ -568,7 +568,7 @@ h1.font-bangla, h2.font-bangla, h3.font-bangla, h4.font-bangla {
   position: absolute;
   right: 60px;
   bottom: 93px;
-  z-index: 2;
+  z-index: 6;
   width: 160px;
   height: auto;
   pointer-events: none;
