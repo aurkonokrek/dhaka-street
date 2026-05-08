@@ -347,34 +347,34 @@ function Index() {
             {/* animated dashed center line */}
             <div className="absolute left-0 right-0 road-dashes" style={{ top: "50%", height: "4px", zIndex: 3 }} />
 
-            {/* BUS — R→L (upper sub-lane: left-movers come from right) */}
+            {/* BUS — R→L (upper sub-lane) */}
             <img
               src={busPng}
               alt=""
               className="street-bus absolute"
-              style={{ bottom: "50px", height: "110px", width: "auto", zIndex: 4, display: "block" }}
+              style={{ bottom: "40px", height: "75px", width: "auto", zIndex: 4, display: "block" }}
             />
-            {/* CNG — L→R (lower sub-lane: right-movers come from left) */}
+            {/* CNG — L→R (lower sub-lane) */}
             <img
               src={cngPng}
               alt=""
               className="street-cng absolute"
-              style={{ bottom: "0px", height: "80px", width: "auto", zIndex: 5, display: "block" }}
+              style={{ bottom: "0px", height: "70px", width: "auto", zIndex: 5, display: "block" }}
             />
             {/* RICKSHAW — L→R (lower sub-lane) */}
             <img
               src={rickshawPng}
               alt=""
               className="street-rickshaw absolute"
-              style={{ bottom: "0px", height: "90px", width: "auto", zIndex: 5, display: "block" }}
+              style={{ bottom: "0px", height: "78px", width: "auto", zIndex: 5, display: "block" }}
             />
             {/* MOTORBIKE — R→L (upper sub-lane) */}
-            <div className="bike-wrap motorbike1" style={{ bottom: "50px" }}>
-              <img src="/vehicles/Motorbike_png.png" className="bike-char motorbike-img" loading="eager" alt="" />
+            <div className="bike-wrap motorbike1" style={{ bottom: "42px" }}>
+              <img src="/vehicles/Motorbike_png.png" className="bike-char motorbike-img" loading="eager" alt="" style={{ height: "42px" }} />
             </div>
             {/* DELIVERY BIKE — R→L (upper sub-lane) */}
-            <div className="bike-wrap delivery1" style={{ bottom: "50px" }}>
-              <img src="/vehicles/Bike_Delivery_Sticker_gif.gif" className="bike-char" loading="eager" alt="" />
+            <div className="bike-wrap delivery1" style={{ bottom: "42px" }}>
+              <img src="/vehicles/Bike_Delivery_Sticker_gif.gif" className="bike-char" loading="eager" alt="" style={{ height: "40px" }} />
             </div>
             {/* BICYCLE — L→R (lower sub-lane) */}
             <div className="bike-wrap bicycle1" style={{ bottom: "0px" }}>

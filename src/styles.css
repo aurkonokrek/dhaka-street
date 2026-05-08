@@ -238,9 +238,9 @@
   0%   { transform: translateX(-500px); }
   100% { transform: translateX(110vw); }
 }
-.street-bus { animation: street-bus 18s linear infinite; animation-delay: 0s; }
-.street-cng { animation: street-cng 12s linear infinite; animation-delay: -4s; }
-.street-rickshaw { animation: street-rickshaw 16s linear infinite; animation-delay: -9s; }
+.street-bus { animation: street-bus 22s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -2s; will-change: transform; }
+.street-cng { animation: street-cng 16s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -6s; will-change: transform; }
+.street-rickshaw { animation: street-rickshaw 20s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -12s; will-change: transform; }
 .street-walkers { animation: street-walkers 22s linear infinite; }
 
 /* === Bikes on the road === */
@@ -258,21 +258,24 @@
   height: 58px;
 }
 .motorbike1 {
-  animation: bikeLeftward 10s linear infinite;
+  animation: bikeLeftward 14s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   animation-delay: -4s;
   z-index: 5;
+  will-change: transform;
 }
-.motorbike1 .bike-char { height: 58px; transform: none; }
+.motorbike1 .bike-char { height: 42px; transform: none; }
 .delivery1 {
-  animation: bikeLeftward 13s linear infinite;
-  animation-delay: -8s;
+  animation: bikeLeftward 17s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: -10s;
   z-index: 5;
+  will-change: transform;
 }
-.delivery1 .bike-char { height: 52px; transform: none; }
+.delivery1 .bike-char { height: 40px; transform: none; }
 .bicycle1 {
-  animation: bikeRightward 16s linear infinite;
-  animation-delay: -2s;
+  animation: bikeRightward 18s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: -3s;
   z-index: 4;
+  will-change: transform;
 }
 .bicycle1 .bike-char { height: 50px; }
 .bicycle-flip { transform: none; }
