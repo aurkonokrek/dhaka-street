@@ -208,6 +208,37 @@ function Index() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Multi-layer parallax for the hero. Each element with [data-parallax-speed]
+  // is translated by (scrollY * speed). Lower speeds = farther background,
+  // higher speeds = closer foreground. rAF keeps it buttery smooth.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+    const layers = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-parallax-speed]")
+    );
+    if (!layers.length) return;
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      for (const el of layers) {
+        const speed = parseFloat(el.dataset.parallaxSpeed || "0");
+        el.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+      }
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* NAV */}
