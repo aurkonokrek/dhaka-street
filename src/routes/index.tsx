@@ -845,7 +845,7 @@ function Index() {
               width="100%"
               height="380"
               style={{ border: 0, borderRadius: 16, display: 'block' }}
-              allowFullScreen=""
+              allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
