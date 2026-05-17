@@ -781,12 +781,12 @@ function Index() {
                 LOCATION
               </div>
               <div className="font-display text-white text-3xl mt-4 leading-tight">
-                HOUSE 12, ROAD 5
+                SHOP B1, MB SQUARE MARKET
                 <br />
-                DHANMONDI, DHAKA
+                DHAKA 1229
               </div>
               <a
-                href="https://www.openstreetmap.org/?mlat=23.7461&mlon=90.3742#map=15/23.7461/90.3742"
+                href="https://maps.app.goo.gl/dhaka-street-bashundhara"
                 target="_blank"
                 rel="noreferrer"
                 className="text-yellow-street mt-6 inline-block hover:underline"
