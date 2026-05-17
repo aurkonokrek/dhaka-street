@@ -841,11 +841,13 @@ function Index() {
             }}
           >
             <iframe
-              title="Dhaka Street location"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=90.36,23.73,90.40,23.77&layer=mapnik"
-              className="w-full h-full"
-              style={{ border: 0 }}
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1825.025068957758!2d90.42311192692888!3d23.81681608963593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7d9a715f9c5%3A0x3f31760387dc159a!2sDhaka%20Street%2C%20Bashundhara%20R%2FA!5e0!3m2!1sen!2sbd!4v1779019084854!5m2!1sen!2sbd"
+              width="100%"
+              height="380"
+              style={{ border: 0, borderRadius: 16, display: 'block' }}
+              allowFullScreen=""
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
             />
             {/* Pin overlay */}
             <svg
