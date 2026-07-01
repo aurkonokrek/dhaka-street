@@ -703,24 +703,31 @@ function Index() {
             ))}
           </div>
 
-          {/* Masonry grid */}
           <div className="mt-12 columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
-            {[
+            {([
               { ar: "4/5" }, { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" },
               { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" }, { ar: "16/9" },
               { ar: "4/5" },
-            ].map((p, i) => (
-              <div
+            ] as { ar: string; src?: string }[]).map((p, i) => (
+              <button
                 key={i}
-                className="reveal mb-5 break-inside-avoid bg-[#2a317a] rounded-[12px] flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                type="button"
+                onClick={() => p.src && setLightboxSrc(p.src)}
+                className="reveal mb-5 w-full break-inside-avoid bg-[#2a317a] rounded-[12px] overflow-hidden flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
                 style={{ aspectRatio: p.ar, border: "2px solid transparent" }}
               >
-                <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
-                  <circle cx="12" cy="13" r="3.5" />
-                </svg>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
-              </div>
+                {p.src ? (
+                  <img src={p.src} alt="" className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <>
+                    <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
+                      <circle cx="12" cy="13" r="3.5" />
+                    </svg>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
+                  </>
+                )}
+              </button>
             ))}
           </div>
 
