@@ -169,21 +169,6 @@ function Index() {
 
   const [activeSection, setActiveSection] = useState<string>("about");
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!lightboxSrc) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightboxSrc(null);
-    };
-    window.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [lightboxSrc]);
 
   useEffect(() => {
     if (menuOpen) {
@@ -703,31 +688,24 @@ function Index() {
             ))}
           </div>
 
+          {/* Masonry grid */}
           <div className="mt-12 columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
-            {([
+            {[
               { ar: "4/5" }, { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" },
               { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" }, { ar: "16/9" },
               { ar: "4/5" },
-            ] as { ar: string; src?: string }[]).map((p, i) => (
-              <button
+            ].map((p, i) => (
+              <div
                 key={i}
-                type="button"
-                onClick={() => p.src && setLightboxSrc(p.src)}
-                className="reveal mb-5 w-full break-inside-avoid bg-[#2a317a] rounded-[12px] overflow-hidden flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                className="reveal mb-5 break-inside-avoid bg-[#2a317a] rounded-[12px] flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
                 style={{ aspectRatio: p.ar, border: "2px solid transparent" }}
               >
-                {p.src ? (
-                  <img src={p.src} alt="" className="w-full h-full object-cover" loading="lazy" />
-                ) : (
-                  <>
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
-                      <circle cx="12" cy="13" r="3.5" />
-                    </svg>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
-                  </>
-                )}
-              </button>
+                <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
+                  <circle cx="12" cy="13" r="3.5" />
+                </svg>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
+              </div>
             ))}
           </div>
 
@@ -956,36 +934,6 @@ function Index() {
           <div className="font-bangla text-yellow-street">ঢাকার স্বাদ ✦</div>
         </div>
       </footer>
-
-      {/* Lightbox */}
-      {lightboxSrc && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setLightboxSrc(null)}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in"
-          style={{ background: "rgba(0,0,0,0.9)", backdropFilter: "blur(6px)" }}
-        >
-          <button
-            type="button"
-            onClick={() => setLightboxSrc(null)}
-            aria-label="Close"
-            className="absolute top-5 right-5 w-11 h-11 rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform"
-            style={{ background: "#F5C800" }}
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
-          <img
-            src={lightboxSrc}
-            alt=""
-            onClick={(e) => e.stopPropagation()}
-            className="max-w-[92vw] max-h-[88vh] rounded-2xl shadow-2xl object-contain"
-            style={{ border: "1px solid rgba(245,200,0,0.25)" }}
-          />
-        </div>
-      )}
     </div>
   );
 }
