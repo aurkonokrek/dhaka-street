@@ -676,12 +676,40 @@ function Index() {
                 ))}
               </div>
               <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
-                {MENU_TABS[activeTab].map((item, i) => (
-                  <div key={i} className="flex justify-between items-baseline border-b border-white/5 pb-2">
-                    <span className="font-bangla text-white/90">{item.name}</span>
-                    <span className="font-display text-yellow-street whitespace-nowrap ml-3" style={{ letterSpacing: "0.04em" }}>৳ {item.price}</span>
-                  </div>
-                ))}
+                {MENU_TABS[activeTab].map((item, i) => {
+                  const soldOut = soldOutNames.has(item.name.trim().toLowerCase());
+                  return (
+                    <div
+                      key={i}
+                      className="flex justify-between items-baseline border-b border-white/5 pb-2"
+                      style={{ opacity: soldOut ? 0.45 : 1 }}
+                    >
+                      <span className="font-bangla text-white/90">
+                        {item.name}
+                        {soldOut && (
+                          <span
+                            className="ml-2 inline-block align-middle rounded px-2 py-0.5"
+                            style={{
+                              background: "rgba(231,76,60,0.15)",
+                              color: "#ff6b6b",
+                              fontFamily: "'Space Mono', monospace",
+                              fontSize: 10,
+                              letterSpacing: "0.1em",
+                            }}
+                          >
+                            SOLD OUT
+                          </span>
+                        )}
+                      </span>
+                      <span
+                        className="font-display text-yellow-street whitespace-nowrap ml-3"
+                        style={{ letterSpacing: "0.04em", textDecoration: soldOut ? "line-through" : "none" }}
+                      >
+                        ৳ {item.price}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
