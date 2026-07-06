@@ -1,7 +1,15 @@
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
 import logo from '@/assets/dhaka-street-logo.jpg';
+
+// ─── SUPABASE INTEGRATION POINTS ───
+// Developer: Wire these up after connecting Supabase
+// Project: dhaka-street
+// URL: https://ezlcmitojisrlhmwoiqq.supabase.co
+// Tables: announcements, hours, video_settings, menu_items, moments
+// Storage bucket: moments (public)
+// Auth: email + password
+// RLS: public SELECT, authenticated admin INSERT/UPDATE/DELETE
 
 export const Route = createFileRoute('/admin')({
   head: () => ({
@@ -18,10 +26,7 @@ export const Route = createFileRoute('/admin')({
       <div style={{ minHeight: '100vh', background: '#212666', color: 'white', display: 'grid', placeItems: 'center', padding: 24 }}>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontFamily: "'Space Mono', monospace" }}>{error.message}</p>
-          <button
-            onClick={() => { reset(); router.invalidate(); }}
-            style={{ marginTop: 16, background: '#F5C800', color: '#212666', padding: '10px 20px', borderRadius: 10, border: 'none', cursor: 'pointer' }}
-          >
+          <button onClick={() => { reset(); router.invalidate(); }} style={{ marginTop: 16, background: '#F5C800', color: '#212666', padding: '10px 20px', borderRadius: 10, border: 'none', cursor: 'pointer' }}>
             Retry
           </button>
         </div>
@@ -38,161 +43,75 @@ function AdminLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // If already signed in, skip to dashboard
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: '/admin/dashboard' });
-    });
-  }, [navigate]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
-    if (signInError) {
+    if (!email || !password) {
       setError('Wrong credentials. Try again.');
-    } else {
-      navigate({ to: '/admin/dashboard' });
+      return;
     }
+    setLoading(true);
+
+    // TODO: Replace with supabase.auth.signInWithPassword({ email, password })
+    // For now: any email + password combination goes through to dashboard.
+    await new Promise((r) => setTimeout(r, 300));
+    setLoading(false);
+    navigate({ to: '/admin/dashboard' });
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    background: 'rgba(0,0,0,0.25)',
+    border: '1px solid rgba(245,200,0,0.25)',
+    color: 'white',
+    fontFamily: "'Space Mono', monospace",
+    fontSize: 14,
+    padding: '12px 14px',
+    borderRadius: 10,
+    outline: 'none',
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: '#212666',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: 24,
-        padding: '40px 20px',
-      }}
-    >
-      <img
-        src={logo}
-        alt="Dhaka Street"
-        style={{ width: 96, height: 96, borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(245,200,0,0.35)' }}
-      />
-      <div
-        style={{
-          background: '#2a317a',
-          border: '1px solid rgba(245,200,0,0.15)',
-          borderRadius: 20,
-          padding: '48px 40px',
-          width: '100%',
-          maxWidth: 420,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 20,
-        }}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <h1
-            style={{
-              fontFamily: "'Hangyaboli', cursive",
-              color: 'white',
-              fontSize: 32,
-              margin: 0,
-              letterSpacing: '0.05em',
-            }}
-          >
-            ADMIN LOGIN
-          </h1>
-          <p
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              color: 'rgba(255,255,255,0.45)',
-              fontSize: 12,
-              marginTop: 8,
-              letterSpacing: '0.08em',
-            }}
-          >
-            Owner access only.
-          </p>
+    <div className="admin-login-page" style={{ minHeight: '100vh', background: '#212666', display: 'grid', placeItems: 'center', padding: 24 }}>
+      <div style={{ width: '100%', maxWidth: 420, background: '#2a317a', border: '1px solid rgba(245,200,0,0.15)', borderRadius: 18, padding: 36, boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
+        <div style={{ display: 'grid', placeItems: 'center', marginBottom: 20 }}>
+          <img src={logo} alt="Dhaka Street" width={88} height={88} style={{ borderRadius: '50%', objectFit: 'cover' }} />
         </div>
+        <h1 style={{ textAlign: 'center', fontFamily: "'Hangyaboly', 'Space Mono', cursive", color: 'white', fontSize: 32, letterSpacing: '0.05em', margin: 0 }}>
+          ADMIN LOGIN
+        </h1>
+        <p style={{ textAlign: 'center', fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 8, marginBottom: 28 }}>
+          Owner access only.
+        </p>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <input
-            type="email"
-            required
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={inputStyle}
-            onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(245,200,0,0.5)')}
-            onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
-          />
-          <input
-            type="password"
-            required
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={inputStyle}
-            onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(245,200,0,0.5)')}
-            onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
-          />
-
+        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 14 }}>
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} autoComplete="current-password" />
           {error && (
-            <div
-              style={{
-                fontFamily: "'Space Mono', monospace",
-                color: '#ff5b5b',
-                fontSize: 13,
-                textAlign: 'center',
-              }}
-            >
-              {error}
-            </div>
+            <p style={{ color: '#ff6b6b', fontFamily: "'Space Mono', monospace", fontSize: 12, margin: 0 }}>{error}</p>
           )}
-
           <button
             type="submit"
             disabled={loading}
+            className="admin-login-btn"
             style={{
               background: '#F5C800',
               color: '#212666',
-              fontFamily: "'Hangyaboli', cursive",
+              fontFamily: "'Hangyaboly', 'Space Mono', cursive",
               fontSize: 20,
               border: 'none',
               borderRadius: 10,
               padding: 14,
               cursor: loading ? 'wait' : 'pointer',
               width: '100%',
-              transition: 'all 0.2s',
-              opacity: loading ? 0.7 : 1,
-            }}
-            onMouseEnter={(e) => {
-              if (loading) return;
-              e.currentTarget.style.background = '#ffd700';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#F5C800';
-              e.currentTarget.style.transform = 'translateY(0)';
+              marginTop: 6,
+              letterSpacing: '0.05em',
             }}
           >
-            {loading ? 'LOGGING IN...' : 'LOGIN'}
+            {loading ? 'SIGNING IN…' : 'LOGIN'}
           </button>
         </form>
       </div>
     </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.12)',
-  borderRadius: 10,
-  padding: '14px 18px',
-  color: 'white',
-  fontFamily: "'Space Mono', monospace",
-  fontSize: 14,
-  outline: 'none',
-  transition: 'border-color 0.2s',
-  boxSizing: 'border-box',
-};
