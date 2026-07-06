@@ -877,12 +877,31 @@ function Index() {
               <div className="text-yellow-street/70 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "10px", letterSpacing: "0.22em" }}>
                 HOURS
               </div>
-              <div className="font-display text-white text-3xl mt-4 leading-tight">
-                DAILY
-                <br />
-                4 PM – 1 AM
-              </div>
-              <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+              {hoursRows.length > 0 ? (
+                <>
+                  <div className="font-display text-white text-3xl mt-4 leading-tight space-y-2">
+                    {hoursRows.map((r, i) => (
+                      <div key={i} style={{ opacity: r.is_open ? 1 : 0.5 }}>
+                        {r.day_label.toUpperCase()}
+                        <br />
+                        <span className="text-yellow-street">
+                          {r.is_open ? r.hours_text : "CLOSED"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+                </>
+              ) : (
+                <>
+                  <div className="font-display text-white text-3xl mt-4 leading-tight">
+                    DAILY
+                    <br />
+                    4 PM – 1 AM
+                  </div>
+                  <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+                </>
+              )}
             </div>
 
             {/* WhatsApp */}
