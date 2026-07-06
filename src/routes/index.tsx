@@ -929,9 +929,24 @@ function Index() {
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-white/10 flex flex-wrap justify-between gap-3 text-xs text-white/50">
+        <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-white/50">
           <div>© {new Date().getFullYear()} Dhaka Street. All rights reserved.</div>
           <div className="font-bangla text-yellow-street">ঢাকার স্বাদ ✦</div>
+          <a
+            href="/admin"
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: '10px',
+              color: 'rgba(255,255,255,0.15)',
+              textDecoration: 'none',
+              letterSpacing: '0.1em',
+              transition: 'color 0.3s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(245,200,0,0.4)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.15)')}
+          >
+            admin
+          </a>
         </div>
       </footer>
     </div>
