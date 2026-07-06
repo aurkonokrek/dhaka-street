@@ -797,7 +797,7 @@ function Index() {
 
           <div className="reveal mx-auto mt-12 relative" style={{ maxWidth: "860px" }}>
             <div
-              className="relative w-full flex flex-col items-center justify-center"
+              className="relative w-full overflow-hidden"
               style={{
                 aspectRatio: "16/9",
                 background: "#212666",
@@ -805,22 +805,31 @@ function Index() {
                 borderRadius: "20px",
               }}
             >
-              <button
-                className="rounded-full flex items-center justify-center animate-pulse-glow"
-                style={{ width: "72px", height: "72px", background: "#F5C800" }}
-                aria-label="Play video"
-              >
-                <svg viewBox="0 0 24 24" className="w-8 h-8 ml-1" fill="#212666">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-              <div className="text-white/50 mt-5" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
-                Customer Stories
-              </div>
+              {videoUrl ? (
+                <iframe
+                  src={toEmbedUrl(videoUrl)}
+                  title="Customer stories"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <button
+                    className="rounded-full flex items-center justify-center animate-pulse-glow"
+                    style={{ width: "72px", height: "72px", background: "#F5C800" }}
+                    aria-label="Play video"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-8 h-8 ml-1" fill="#212666">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <div className="text-white/50 mt-5" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
+                    Customer Stories
+                  </div>
+                </div>
+              )}
             </div>
-            <p className="text-center text-white/30 mt-4" style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>
-              📍 Replace with your YouTube embed link
-            </p>
           </div>
         </div>
       </section>
