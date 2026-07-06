@@ -171,6 +171,28 @@ function Index() {
   const [activeSection, setActiveSection] = useState<string>("about");
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // Dynamic content from Lovable Cloud
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [hoursRows, setHoursRows] = useState<{ day_label: string; hours_text: string; is_open: boolean }[]>([]);
+  const [moments, setMoments] = useState<{ id: string; image_url: string; caption: string | null }[]>([]);
+  const [soldOutNames, setSoldOutNames] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    (async () => {
+      const [{ data: v }, { data: h }, { data: m }, { data: mi }] = await Promise.all([
+        supabase.from("video_settings").select("youtube_url").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+        supabase.from("hours").select("day_label,hours_text,is_open").order("updated_at"),
+        supabase.from("moments").select("id,image_url,caption").order("uploaded_at", { ascending: false }),
+        supabase.from("menu_items").select("name,is_available").eq("is_available", false),
+      ]);
+      if (v?.youtube_url) setVideoUrl(v.youtube_url);
+      if (h) setHoursRows(h);
+      if (m) setMoments(m);
+      if (mi) setSoldOutNames(new Set(mi.map((r) => r.name.trim().toLowerCase())));
+    })();
+  }, []);
+
+
   useEffect(() => {
     if (menuOpen) {
       const el = document.getElementById("full-menu");
@@ -654,12 +676,40 @@ function Index() {
                 ))}
               </div>
               <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
-                {MENU_TABS[activeTab].map((item, i) => (
-                  <div key={i} className="flex justify-between items-baseline border-b border-white/5 pb-2">
-                    <span className="font-bangla text-white/90">{item.name}</span>
-                    <span className="font-display text-yellow-street whitespace-nowrap ml-3" style={{ letterSpacing: "0.04em" }}>৳ {item.price}</span>
-                  </div>
-                ))}
+                {MENU_TABS[activeTab].map((item, i) => {
+                  const soldOut = soldOutNames.has(item.name.trim().toLowerCase());
+                  return (
+                    <div
+                      key={i}
+                      className="flex justify-between items-baseline border-b border-white/5 pb-2"
+                      style={{ opacity: soldOut ? 0.45 : 1 }}
+                    >
+                      <span className="font-bangla text-white/90">
+                        {item.name}
+                        {soldOut && (
+                          <span
+                            className="ml-2 inline-block align-middle rounded px-2 py-0.5"
+                            style={{
+                              background: "rgba(231,76,60,0.15)",
+                              color: "#ff6b6b",
+                              fontFamily: "'Space Mono', monospace",
+                              fontSize: 10,
+                              letterSpacing: "0.1em",
+                            }}
+                          >
+                            SOLD OUT
+                          </span>
+                        )}
+                      </span>
+                      <span
+                        className="font-display text-yellow-street whitespace-nowrap ml-3"
+                        style={{ letterSpacing: "0.04em", textDecoration: soldOut ? "line-through" : "none" }}
+                      >
+                        ৳ {item.price}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -692,23 +742,38 @@ function Index() {
 
           {/* Masonry grid */}
           <div className="mt-12 columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
-            {[
-              { ar: "4/5" }, { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" },
-              { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" }, { ar: "16/9" },
-              { ar: "4/5" },
-            ].map((p, i) => (
-              <div
-                key={i}
-                className="reveal mb-5 break-inside-avoid bg-[#2a317a] rounded-[12px] flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
-                style={{ aspectRatio: p.ar, border: "2px solid transparent" }}
-              >
-                <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
-                  <circle cx="12" cy="13" r="3.5" />
-                </svg>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
-              </div>
-            ))}
+            {moments.length > 0
+              ? moments.map((m) => (
+                  <div
+                    key={m.id}
+                    className="reveal mb-5 break-inside-avoid bg-[#2a317a] rounded-[12px] overflow-hidden hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                    style={{ border: "2px solid transparent" }}
+                  >
+                    <img
+                      src={m.image_url}
+                      alt={m.caption ?? "Dhaka Street moment"}
+                      loading="lazy"
+                      className="w-full h-auto block"
+                    />
+                  </div>
+                ))
+              : [
+                  { ar: "4/5" }, { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" },
+                  { ar: "16/9" }, { ar: "4/5" }, { ar: "1/1" }, { ar: "16/9" },
+                  { ar: "4/5" },
+                ].map((p, i) => (
+                  <div
+                    key={i}
+                    className="reveal mb-5 break-inside-avoid bg-[#2a317a] rounded-[12px] flex flex-col items-center justify-center text-white/20 hover:border-2 hover:border-yellow-street hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                    style={{ aspectRatio: p.ar, border: "2px solid transparent" }}
+                  >
+                    <svg viewBox="0 0 24 24" className="w-8 h-8 mb-2" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M4 7h3l2-2h6l2 2h3v12H4z" />
+                      <circle cx="12" cy="13" r="3.5" />
+                    </svg>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>Your moment here</span>
+                  </div>
+                ))}
           </div>
 
           <p className="text-center text-white/40 mt-6" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
@@ -732,7 +797,7 @@ function Index() {
 
           <div className="reveal mx-auto mt-12 relative" style={{ maxWidth: "860px" }}>
             <div
-              className="relative w-full flex flex-col items-center justify-center"
+              className="relative w-full overflow-hidden"
               style={{
                 aspectRatio: "16/9",
                 background: "#212666",
@@ -740,22 +805,31 @@ function Index() {
                 borderRadius: "20px",
               }}
             >
-              <button
-                className="rounded-full flex items-center justify-center animate-pulse-glow"
-                style={{ width: "72px", height: "72px", background: "#F5C800" }}
-                aria-label="Play video"
-              >
-                <svg viewBox="0 0 24 24" className="w-8 h-8 ml-1" fill="#212666">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-              <div className="text-white/50 mt-5" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
-                Customer Stories
-              </div>
+              {videoUrl ? (
+                <iframe
+                  src={toEmbedUrl(videoUrl)}
+                  title="Customer stories"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <button
+                    className="rounded-full flex items-center justify-center animate-pulse-glow"
+                    style={{ width: "72px", height: "72px", background: "#F5C800" }}
+                    aria-label="Play video"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-8 h-8 ml-1" fill="#212666">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <div className="text-white/50 mt-5" style={{ fontFamily: "'Space Mono', monospace", fontSize: "12px" }}>
+                    Customer Stories
+                  </div>
+                </div>
+              )}
             </div>
-            <p className="text-center text-white/30 mt-4" style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px" }}>
-              📍 Replace with your YouTube embed link
-            </p>
           </div>
         </div>
       </section>
@@ -803,12 +877,31 @@ function Index() {
               <div className="text-yellow-street/70 uppercase" style={{ fontFamily: "'Space Mono', monospace", fontSize: "10px", letterSpacing: "0.22em" }}>
                 HOURS
               </div>
-              <div className="font-display text-white text-3xl mt-4 leading-tight">
-                DAILY
-                <br />
-                4 PM – 1 AM
-              </div>
-              <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+              {hoursRows.length > 0 ? (
+                <>
+                  <div className="font-display text-white text-3xl mt-4 leading-tight space-y-2">
+                    {hoursRows.map((r, i) => (
+                      <div key={i} style={{ opacity: r.is_open ? 1 : 0.5 }}>
+                        {r.day_label.toUpperCase()}
+                        <br />
+                        <span className="text-yellow-street">
+                          {r.is_open ? r.hours_text : "CLOSED"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+                </>
+              ) : (
+                <>
+                  <div className="font-display text-white text-3xl mt-4 leading-tight">
+                    DAILY
+                    <br />
+                    4 PM – 1 AM
+                  </div>
+                  <div className="font-bangla text-white/70 mt-6 text-sm">Late nights welcome.</div>
+                </>
+              )}
             </div>
 
             {/* WhatsApp */}
@@ -954,6 +1047,26 @@ function Index() {
     </div>
   );
 }
+
+// Convert any YouTube URL (watch, youtu.be, /embed/, /shorts/) into an embed URL.
+function toEmbedUrl(input: string): string {
+  const url = input.trim();
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    let id = "";
+    if (host === "youtu.be") id = u.pathname.slice(1);
+    else if (host.endsWith("youtube.com")) {
+      if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2] || "";
+      else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2] || "";
+      else id = u.searchParams.get("v") || "";
+    }
+    return id ? `https://www.youtube.com/embed/${id}` : url;
+  } catch {
+    return url;
+  }
+}
+
 
 function AnnouncementBanner() {
   const [msg, setMsg] = useState<string | null>(null);
