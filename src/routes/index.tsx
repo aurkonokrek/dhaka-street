@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/dhaka-street-logo.jpg";
 import busPng from "@/assets/bus.png";
 import cngPng from "@/assets/cng.png";
