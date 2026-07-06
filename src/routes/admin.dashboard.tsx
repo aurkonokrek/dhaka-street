@@ -182,8 +182,12 @@ function AdminDashboard() {
         </aside>
 
         {/* Main content */}
-        <main style={{ padding: '32px 5%', flex: 1 }}>
-          <SectionPlaceholder id={active} />
+        <main style={{ padding: '32px 5%', flex: 1, minWidth: 0 }}>
+          {active === 'gallery' && <GallerySection />}
+          {active === 'video' && <VideoSection />}
+          {active === 'menu' && <MenuSection />}
+          {active === 'banner' && <BannerSection />}
+          {active === 'hours' && <HoursSection />}
         </main>
       </div>
 
