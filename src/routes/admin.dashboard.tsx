@@ -2,6 +2,11 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import logo from '@/assets/dhaka-street-logo.jpg';
+import { GallerySection } from '@/components/admin/GallerySection';
+import { VideoSection } from '@/components/admin/VideoSection';
+import { MenuSection } from '@/components/admin/MenuSection';
+import { BannerSection } from '@/components/admin/BannerSection';
+import { HoursSection } from '@/components/admin/HoursSection';
 
 type SectionId = 'gallery' | 'video' | 'menu' | 'banner' | 'hours';
 
@@ -177,8 +182,12 @@ function AdminDashboard() {
         </aside>
 
         {/* Main content */}
-        <main style={{ padding: '32px 5%', flex: 1 }}>
-          <SectionPlaceholder id={active} />
+        <main style={{ padding: '32px 5%', flex: 1, minWidth: 0 }}>
+          {active === 'gallery' && <GallerySection />}
+          {active === 'video' && <VideoSection />}
+          {active === 'menu' && <MenuSection />}
+          {active === 'banner' && <BannerSection />}
+          {active === 'hours' && <HoursSection />}
         </main>
       </div>
 
@@ -215,30 +224,3 @@ function AdminDashboard() {
   );
 }
 
-function SectionPlaceholder({ id }: { id: SectionId }) {
-  const section = SECTIONS.find((s) => s.id === id)!;
-  return (
-    <div>
-      <h2 style={{ fontFamily: "'Hangyaboli', cursive", fontSize: 28, margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span>{section.icon}</span> {section.label}
-      </h2>
-      <p style={{ fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.55)', fontSize: 13, marginTop: 8 }}>
-        Manage your {section.label.toLowerCase()} content here.
-      </p>
-      <div
-        style={{
-          marginTop: 24,
-          background: '#212666',
-          border: '1px dashed rgba(245,200,0,0.25)',
-          borderRadius: 16,
-          padding: 40,
-          textAlign: 'center',
-          color: 'rgba(255,255,255,0.5)',
-          fontFamily: "'Space Mono', monospace",
-        }}
-      >
-        {section.label} editor coming next.
-      </div>
-    </div>
-  );
-}

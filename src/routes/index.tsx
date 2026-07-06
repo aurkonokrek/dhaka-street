@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/dhaka-street-logo.jpg";
 import busPng from "@/assets/bus.png";
 import cngPng from "@/assets/cng.png";
@@ -241,6 +242,7 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <AnnouncementBanner />
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#212666]/80 border-b-2 border-yellow-street">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
@@ -949,6 +951,65 @@ function Index() {
           </a>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function AnnouncementBanner() {
+  const [msg, setMsg] = useState<string | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from("announcements")
+      .select("message,is_active")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.message) setMsg(data.message);
+      });
+  }, []);
+
+  if (!msg || dismissed) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 60,
+        background: "#F5C800",
+        color: "#212666",
+        fontFamily: "'Space Mono', monospace",
+        fontWeight: 700,
+        fontSize: 14,
+        padding: "10px 20px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 12,
+      }}
+    >
+      <span style={{ flex: 1, textAlign: "center" }}>{msg}</span>
+      <button
+        onClick={() => setDismissed(true)}
+        aria-label="Dismiss"
+        style={{
+          background: "transparent",
+          border: "none",
+          color: "#212666",
+          cursor: "pointer",
+          fontSize: 18,
+          lineHeight: 1,
+          padding: 4,
+        }}
+      >
+        ✕
+      </button>
     </div>
   );
 }
