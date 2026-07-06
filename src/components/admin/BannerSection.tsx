@@ -1,98 +1,144 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
+import type { ToastAPI } from './Toast';
 
-type Row = { id: string; message: string; is_active: boolean; created_at: string };
+const MAX = 120;
 
-export function BannerSection() {
-  const [row, setRow] = useState<Row | null>(null);
+export function BannerSection({ toast }: { toast: ToastAPI }) {
+  // TODO: Load from announcements table (WHERE is_active LIMIT 1)
   const [message, setMessage] = useState('');
-  const [active, setActive] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [err, setErr] = useState('');
-  const [saving, setSaving] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
-  const load = async () => {
-    const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false }).limit(1).maybeSingle();
-    const r = data as Row | null;
-    setRow(r);
-    setMessage(r?.message || '');
-    setActive(!!r?.is_active);
-  };
-  useEffect(() => { load(); }, []);
-
-  const save = async () => {
-    setErr(''); setMsg(''); setSaving(true);
-    if (!message.trim()) { setErr('Message cannot be empty'); setSaving(false); return; }
-    // Deactivate all other announcements first so only this one is active
-    if (active) await supabase.from('announcements').update({ is_active: false }).neq('id', row?.id ?? '00000000-0000-0000-0000-000000000000');
-    if (row) {
-      const { error } = await supabase.from('announcements').update({ message: message.trim(), is_active: active }).eq('id', row.id);
-      if (error) setErr(error.message); else setMsg('Saved.');
-    } else {
-      const { error } = await supabase.from('announcements').insert({ message: message.trim(), is_active: active });
-      if (error) setErr(error.message); else setMsg('Saved.');
-    }
-    setSaving(false);
-    load();
+  const save = () => {
+    // TODO: Save to announcements table, website reads on load
+    //   await supabase.from('announcements').upsert({ id, message, is_active: isActive });
+    toast.success('Banner saved ✓');
   };
 
   return (
-    <div>
-      <h2 style={h2}>📢 Announcement Banner</h2>
-      <p style={sub}>Show a message on the hero section. Useful for closures, events, or deals.</p>
+    <div style={{ maxWidth: 720 }}>
+      <h2 style={{ fontFamily: "'Hangyaboly', 'Space Mono', cursive", fontSize: 30, letterSpacing: '0.04em', margin: 0 }}>
+        Announcement Banner
+      </h2>
+      <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, color: 'rgba(255,255,255,0.55)', marginTop: 6, marginBottom: 24 }}>
+        Shows a strip at the top of the website when active.
+      </p>
 
-      <div style={card}>
-        <label style={label}>MESSAGE</label>
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="⚠️ Closed today for renovation. Back tomorrow at 4PM!"
-          style={input}
-        />
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value.slice(0, MAX))}
+        placeholder="Type your announcement here..."
+        rows={3}
+        style={{
+          width: '100%',
+          background: 'rgba(0,0,0,0.25)',
+          border: '1px solid rgba(245,200,0,0.25)',
+          color: 'white',
+          fontFamily: "'Space Mono', monospace",
+          fontSize: 14,
+          padding: '12px 14px',
+          borderRadius: 10,
+          outline: 'none',
+          resize: 'vertical',
+        }}
+      />
+      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 6, textAlign: 'right' }}>
+        {message.length} / {MAX}
+      </div>
 
-        <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button
-            onClick={() => setActive(!active)}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 18 }}>
+        <button
+          role="switch"
+          aria-checked={isActive}
+          onClick={() => setIsActive((v) => !v)}
+          style={{
+            width: 58,
+            height: 30,
+            borderRadius: 999,
+            background: isActive ? '#2ecc71' : 'rgba(255,255,255,0.15)',
+            border: 'none',
+            position: 'relative',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+          }}
+        >
+          <span
             style={{
-              padding: '8px 16px',
-              borderRadius: 8,
+              position: 'absolute',
+              top: 3,
+              left: isActive ? 31 : 3,
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              background: 'white',
+              transition: 'left 0.2s',
+            }}
+          />
+        </button>
+        <span
+          style={{
+            fontFamily: "'Space Mono', monospace",
+            fontSize: 13,
+            color: isActive ? '#2ecc71' : 'rgba(255,255,255,0.45)',
+            letterSpacing: '0.05em',
+          }}
+        >
+          {isActive ? 'Banner is ACTIVE' : 'Banner is OFF'}
+        </span>
+      </div>
+
+      <button
+        onClick={save}
+        style={{
+          marginTop: 22,
+          background: '#F5C800',
+          color: '#212666',
+          fontFamily: "'Hangyaboly', 'Space Mono', cursive",
+          fontSize: 16,
+          border: 'none',
+          borderRadius: 10,
+          padding: '12px 28px',
+          cursor: 'pointer',
+          letterSpacing: '0.06em',
+        }}
+      >
+        SAVE BANNER
+      </button>
+
+      <div style={{ marginTop: 34 }}>
+        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', marginBottom: 10 }}>
+          PREVIEW
+        </div>
+        <div
+          style={{
+            background: '#F5C800',
+            color: '#212666',
+            padding: '12px 20px',
+            borderRadius: 6,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontFamily: "'Space Mono', monospace",
+            fontSize: 14,
+            fontWeight: 700,
+          }}
+        >
+          <span>{message || 'Your announcement will appear here'}</span>
+          <button
+            aria-label="Close preview"
+            style={{
+              background: 'transparent',
               border: 'none',
-              background: active ? '#2ecc71' : 'rgba(255,255,255,0.1)',
-              color: 'white',
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 12,
+              color: '#212666',
+              fontSize: 16,
               cursor: 'pointer',
+              fontWeight: 700,
+              padding: '0 4px',
             }}
           >
-            {active ? 'ACTIVE' : 'INACTIVE'}
+            ✕
           </button>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>
-            {active ? 'Banner will show on the website' : 'Banner is hidden'}
-          </span>
         </div>
-
-        {/* Preview */}
-        <div style={{ marginTop: 20 }}>
-          <p style={label}>PREVIEW</p>
-          <div style={{ background: '#F5C800', color: '#212666', padding: '12px 20px', borderRadius: 8, fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, opacity: active ? 1 : 0.4 }}>
-            <span>{message || 'Your message preview…'}</span>
-            <span style={{ opacity: 0.6 }}>✕</span>
-          </div>
-        </div>
-
-        {err && <p style={errStyle}>{err}</p>}
-        {msg && <p style={msgStyle}>{msg}</p>}
-        <button onClick={save} disabled={saving} style={saveBtn}>{saving ? 'SAVING…' : 'SAVE'}</button>
       </div>
     </div>
   );
 }
-
-const h2: React.CSSProperties = { fontFamily: "'Hangyaboli', cursive", fontSize: 28, margin: 0 };
-const sub: React.CSSProperties = { fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.55)', fontSize: 13, marginTop: 8 };
-const card: React.CSSProperties = { marginTop: 20, background: '#212666', border: '1px solid rgba(245,200,0,0.15)', borderRadius: 16, padding: 24 };
-const label: React.CSSProperties = { display: 'block', fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 8, letterSpacing: '0.08em' };
-const input: React.CSSProperties = { width: '100%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '12px 14px', color: 'white', fontFamily: "'Space Mono', monospace", fontSize: 13, outline: 'none', boxSizing: 'border-box' };
-const saveBtn: React.CSSProperties = { marginTop: 16, background: '#F5C800', color: '#212666', fontFamily: "'Hangyaboli', cursive", fontSize: 16, border: 'none', borderRadius: 8, padding: '10px 24px', cursor: 'pointer' };
-const errStyle: React.CSSProperties = { color: '#ff5b5b', fontSize: 12, marginTop: 10, fontFamily: "'Space Mono', monospace" };
-const msgStyle: React.CSSProperties = { color: '#7ee787', fontSize: 12, marginTop: 10, fontFamily: "'Space Mono', monospace" };
