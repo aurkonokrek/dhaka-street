@@ -171,6 +171,28 @@ function Index() {
   const [activeSection, setActiveSection] = useState<string>("about");
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // Dynamic content from Lovable Cloud
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [hoursRows, setHoursRows] = useState<{ day_label: string; hours_text: string; is_open: boolean }[]>([]);
+  const [moments, setMoments] = useState<{ id: string; image_url: string; caption: string | null }[]>([]);
+  const [soldOutNames, setSoldOutNames] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    (async () => {
+      const [{ data: v }, { data: h }, { data: m }, { data: mi }] = await Promise.all([
+        supabase.from("video_settings").select("youtube_url").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+        supabase.from("hours").select("day_label,hours_text,is_open").order("updated_at"),
+        supabase.from("moments").select("id,image_url,caption").order("uploaded_at", { ascending: false }),
+        supabase.from("menu_items").select("name,is_available").eq("is_available", false),
+      ]);
+      if (v?.youtube_url) setVideoUrl(v.youtube_url);
+      if (h) setHoursRows(h);
+      if (m) setMoments(m);
+      if (mi) setSoldOutNames(new Set(mi.map((r) => r.name.trim().toLowerCase())));
+    })();
+  }, []);
+
+
   useEffect(() => {
     if (menuOpen) {
       const el = document.getElementById("full-menu");
