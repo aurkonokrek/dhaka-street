@@ -1048,6 +1048,26 @@ function Index() {
   );
 }
 
+// Convert any YouTube URL (watch, youtu.be, /embed/, /shorts/) into an embed URL.
+function toEmbedUrl(input: string): string {
+  const url = input.trim();
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    let id = "";
+    if (host === "youtu.be") id = u.pathname.slice(1);
+    else if (host.endsWith("youtube.com")) {
+      if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2] || "";
+      else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2] || "";
+      else id = u.searchParams.get("v") || "";
+    }
+    return id ? `https://www.youtube.com/embed/${id}` : url;
+  } catch {
+    return url;
+  }
+}
+
+
 function AnnouncementBanner() {
   const [msg, setMsg] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
