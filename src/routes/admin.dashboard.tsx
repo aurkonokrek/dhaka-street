@@ -224,30 +224,3 @@ function AdminDashboard() {
   );
 }
 
-function SectionPlaceholder({ id }: { id: SectionId }) {
-  const section = SECTIONS.find((s) => s.id === id)!;
-  return (
-    <div>
-      <h2 style={{ fontFamily: "'Hangyaboli', cursive", fontSize: 28, margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span>{section.icon}</span> {section.label}
-      </h2>
-      <p style={{ fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.55)', fontSize: 13, marginTop: 8 }}>
-        Manage your {section.label.toLowerCase()} content here.
-      </p>
-      <div
-        style={{
-          marginTop: 24,
-          background: '#212666',
-          border: '1px dashed rgba(245,200,0,0.25)',
-          borderRadius: 16,
-          padding: 40,
-          textAlign: 'center',
-          color: 'rgba(255,255,255,0.5)',
-          fontFamily: "'Space Mono', monospace",
-        }}
-      >
-        {section.label} editor coming next.
-      </div>
-    </div>
-  );
-}
