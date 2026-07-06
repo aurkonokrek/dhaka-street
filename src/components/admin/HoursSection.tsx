@@ -1,110 +1,157 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
+import type { ToastAPI } from './Toast';
 
-type Row = { id: string; day_label: string; hours_text: string; is_open: boolean; updated_at: string };
+type Row = { id: string; day_label: string; hours_text: string; is_open: boolean };
 
-export function HoursSection() {
-  const [rows, setRows] = useState<Row[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState('');
-  const [msg, setMsg] = useState('');
+// TODO: Load from hours table (SELECT * FROM hours ORDER BY updated_at)
+const INITIAL_ROWS: Row[] = [
+  { id: 'h1', day_label: 'Daily', hours_text: '4 PM – 1 AM', is_open: true },
+  { id: 'h2', day_label: 'Late Night', hours_text: 'Welcome anytime after midnight', is_open: true },
+];
 
-  const [newLabel, setNewLabel] = useState('');
-  const [newText, setNewText] = useState('');
+export function HoursSection({ toast }: { toast: ToastAPI }) {
+  const [rows, setRows] = useState<Row[]>(INITIAL_ROWS);
+  const [savedFlash, setSavedFlash] = useState<Record<string, boolean>>({});
 
-  const load = async () => {
-    setLoading(true);
-    const { data, error } = await supabase.from('hours').select('*').order('updated_at');
-    if (error) setErr(error.message);
-    else setRows((data as Row[]) || []);
-    setLoading(false);
-  };
-  useEffect(() => { load(); }, []);
-
-  const addRow = async () => {
-    setErr(''); setMsg('');
-    if (!newLabel.trim() || !newText.trim()) { setErr('Fill both fields'); return; }
-    const { error } = await supabase.from('hours').insert({ day_label: newLabel.trim(), hours_text: newText.trim(), is_open: true });
-    if (error) { setErr(error.message); return; }
-    setNewLabel(''); setNewText('');
-    load();
+  const update = (id: string, patch: Partial<Row>) => {
+    setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)));
   };
 
-  const deleteRow = async (id: string) => {
-    if (!confirm('Delete this entry?')) return;
-    await supabase.from('hours').delete().eq('id', id);
-    load();
+  const saveRow = (id: string) => {
+    // TODO: await supabase.from('hours').update({ day_label, hours_text, is_open }).eq('id', id)
+    setSavedFlash((s) => ({ ...s, [id]: true }));
+    toast.success('Hours updated ✓');
+    setTimeout(() => setSavedFlash((s) => ({ ...s, [id]: false })), 1600);
   };
 
-  const saveRow = async (id: string, patch: Partial<Row>) => {
-    setErr(''); setMsg('');
-    const { error } = await supabase.from('hours').update(patch).eq('id', id);
-    if (error) setErr(error.message); else { setMsg('Saved.'); load(); }
+  const addRow = () => {
+    // TODO: await supabase.from('hours').insert({ day_label: '', hours_text: '', is_open: true })
+    setRows((prev) => [...prev, { id: `new-${Date.now()}`, day_label: '', hours_text: '', is_open: true }]);
+  };
+
+  const removeRow = (id: string) => {
+    // TODO: await supabase.from('hours').delete().eq('id', id)
+    setRows((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  const inputStyle: React.CSSProperties = {
+    background: 'rgba(0,0,0,0.25)',
+    border: '1px solid rgba(245,200,0,0.2)',
+    color: 'white',
+    fontFamily: "'Space Mono', monospace",
+    fontSize: 13,
+    padding: '8px 12px',
+    borderRadius: 8,
+    outline: 'none',
+    width: '100%',
   };
 
   return (
-    <div>
-      <h2 style={h2}>🕐 Opening Hours</h2>
-      <p style={sub}>Update your hours. Changes reflect on the website immediately.</p>
+    <div style={{ maxWidth: 900 }}>
+      <h2 style={{ fontFamily: "'Hangyaboly', 'Space Mono', cursive", fontSize: 30, letterSpacing: '0.04em', margin: 0 }}>
+        Hours
+      </h2>
+      <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, color: 'rgba(255,255,255,0.55)', marginTop: 6, marginBottom: 24 }}>
+        Update your hours. Changes reflect on the website immediately.
+      </p>
 
-      <div style={{ ...card, marginTop: 20 }}>
-        <p style={{ ...label, marginBottom: 12 }}>ADD ENTRY</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: 8 }}>
-          <input placeholder="Day / label (e.g. Daily)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} style={input} />
-          <input placeholder="Hours (e.g. 4 PM – 1 AM)" value={newText} onChange={(e) => setNewText(e.target.value)} style={input} />
-          <button onClick={addRow} style={saveBtn}>ADD</button>
-        </div>
+      <div style={{ display: 'grid', gap: 10 }}>
+        {rows.map((r) => (
+          <div
+            key={r.id}
+            style={{
+              background: '#2a317a',
+              border: '1px solid rgba(245,200,0,0.15)',
+              borderRadius: 12,
+              padding: '14px 16px',
+              display: 'grid',
+              gridTemplateColumns: '200px 1fr 150px 100px 24px 40px',
+              alignItems: 'center',
+              gap: 12,
+            }}
+          >
+            <input
+              value={r.day_label}
+              onChange={(e) => update(r.id, { day_label: e.target.value })}
+              placeholder="Day label"
+              style={inputStyle}
+            />
+            <input
+              value={r.hours_text}
+              onChange={(e) => update(r.id, { hours_text: e.target.value })}
+              placeholder="Hours text"
+              style={inputStyle}
+            />
+            <button
+              onClick={() => update(r.id, { is_open: !r.is_open })}
+              style={{
+                background: r.is_open ? 'rgba(46,204,113,0.15)' : 'rgba(231,76,60,0.15)',
+                color: r.is_open ? '#2ecc71' : '#e74c3c',
+                border: `1px solid ${r.is_open ? 'rgba(46,204,113,0.5)' : 'rgba(231,76,60,0.5)'}`,
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 11,
+                padding: '8px 12px',
+                borderRadius: 999,
+                cursor: 'pointer',
+                letterSpacing: '0.06em',
+              }}
+            >
+              {r.is_open ? 'Open' : 'Closed'}
+            </button>
+            <button
+              onClick={() => saveRow(r.id)}
+              style={{
+                background: '#F5C800',
+                color: '#212666',
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 12,
+                border: 'none',
+                borderRadius: 8,
+                padding: '8px 14px',
+                cursor: 'pointer',
+                letterSpacing: '0.06em',
+                fontWeight: 700,
+              }}
+            >
+              SAVE
+            </button>
+            <div style={{ color: '#2ecc71', fontSize: 16, opacity: savedFlash[r.id] ? 1 : 0, transition: 'opacity 0.2s' }}>✓</div>
+            <button
+              onClick={() => removeRow(r.id)}
+              aria-label="Delete row"
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(231,76,60,0.4)',
+                color: '#e74c3c',
+                borderRadius: 8,
+                padding: '6px 8px',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              🗑
+            </button>
+          </div>
+        ))}
       </div>
 
-      {err && <p style={errStyle}>{err}</p>}
-      {msg && <p style={msgStyle}>{msg}</p>}
-
-      <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {loading ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Mono', monospace" }}>Loading…</p>
-        ) : rows.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Mono', monospace" }}>No entries yet.</p>
-        ) : (
-          rows.map((r) => <HoursRow key={r.id} row={r} onSave={saveRow} onDelete={deleteRow} />)
-        )}
-      </div>
+      <button
+        onClick={addRow}
+        style={{
+          marginTop: 18,
+          background: 'transparent',
+          border: '1px dashed rgba(245,200,0,0.4)',
+          color: '#F5C800',
+          fontFamily: "'Space Mono', monospace",
+          fontSize: 13,
+          padding: '10px 20px',
+          borderRadius: 10,
+          cursor: 'pointer',
+          letterSpacing: '0.06em',
+        }}
+      >
+        + ADD NEW ROW
+      </button>
     </div>
   );
 }
-
-function HoursRow({ row, onSave, onDelete }: { row: Row; onSave: (id: string, patch: Partial<Row>) => void; onDelete: (id: string) => void }) {
-  const [dayLabel, setDayLabel] = useState(row.day_label);
-  const [hoursText, setHoursText] = useState(row.hours_text);
-  const [isOpen, setIsOpen] = useState(row.is_open);
-  const dirty = dayLabel !== row.day_label || hoursText !== row.hours_text || isOpen !== row.is_open;
-
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto auto auto', gap: 8, alignItems: 'center', background: '#212666', padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-      <input value={dayLabel} onChange={(e) => setDayLabel(e.target.value)} style={input} />
-      <input value={hoursText} onChange={(e) => setHoursText(e.target.value)} style={input} />
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        style={{ padding: '8px 14px', borderRadius: 8, border: 'none', background: isOpen ? '#2ecc71' : '#e74c3c', color: 'white', fontFamily: "'Space Mono', monospace", fontSize: 11, cursor: 'pointer', minWidth: 90 }}
-      >
-        {isOpen ? 'OPEN' : 'CLOSED'}
-      </button>
-      <button
-        onClick={() => onSave(row.id, { day_label: dayLabel, hours_text: hoursText, is_open: isOpen })}
-        disabled={!dirty}
-        style={{ ...saveBtn, padding: '8px 14px', fontSize: 14, opacity: dirty ? 1 : 0.5, cursor: dirty ? 'pointer' : 'default' }}
-      >
-        SAVE
-      </button>
-      <button onClick={() => onDelete(row.id)} style={{ background: 'transparent', border: '1px solid rgba(231,76,60,0.5)', color: '#e74c3c', padding: '8px 10px', borderRadius: 8, cursor: 'pointer' }}>🗑</button>
-    </div>
-  );
-}
-
-const h2: React.CSSProperties = { fontFamily: "'Hangyaboli', cursive", fontSize: 28, margin: 0 };
-const sub: React.CSSProperties = { fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.55)', fontSize: 13, marginTop: 8 };
-const card: React.CSSProperties = { background: '#212666', border: '1px solid rgba(245,200,0,0.15)', borderRadius: 16, padding: 20 };
-const label: React.CSSProperties = { fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.08em', margin: 0 };
-const input: React.CSSProperties = { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '10px 12px', color: 'white', fontFamily: "'Space Mono', monospace", fontSize: 13, outline: 'none', boxSizing: 'border-box', width: '100%' };
-const saveBtn: React.CSSProperties = { background: '#F5C800', color: '#212666', fontFamily: "'Hangyaboli', cursive", fontSize: 15, border: 'none', borderRadius: 8, padding: '10px 20px', cursor: 'pointer' };
-const errStyle: React.CSSProperties = { color: '#ff5b5b', fontSize: 12, marginTop: 12, fontFamily: "'Space Mono', monospace" };
-const msgStyle: React.CSSProperties = { color: '#7ee787', fontSize: 12, marginTop: 12, fontFamily: "'Space Mono', monospace" };

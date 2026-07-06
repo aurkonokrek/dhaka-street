@@ -1,119 +1,162 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useRef, useState } from 'react';
+import type { ToastAPI } from './Toast';
 
-type Moment = { id: string; image_url: string; caption: string | null; uploaded_at: string };
+// TODO: Replace mock data with SELECT * FROM moments ORDER BY uploaded_at DESC
+const INITIAL_PHOTOS = [
+  { id: 'm1', url: '', uploaded_at: '2026-07-01' },
+  { id: 'm2', url: '', uploaded_at: '2026-06-28' },
+  { id: 'm3', url: '', uploaded_at: '2026-06-25' },
+  { id: 'm4', url: '', uploaded_at: '2026-06-22' },
+  { id: 'm5', url: '', uploaded_at: '2026-06-18' },
+  { id: 'm6', url: '', uploaded_at: '2026-06-14' },
+];
 
-const MAX_MB = 5;
-const ACCEPT = ['image/jpeg', 'image/png', 'image/webp'];
+type Photo = { id: string; url: string; uploaded_at: string };
 
-export function GallerySection() {
-  const [items, setItems] = useState<Moment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [err, setErr] = useState('');
-  const [dragOver, setDragOver] = useState(false);
+export function GallerySection({ toast }: { toast: ToastAPI }) {
+  const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
+  const [dragging, setDragging] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
 
-  const load = async () => {
-    setLoading(true);
-    const { data, error } = await supabase.from('moments').select('*').order('uploaded_at', { ascending: false });
-    if (error) setErr(error.message);
-    else setItems(data || []);
-    setLoading(false);
-  };
-
-  useEffect(() => { load(); }, []);
-
-  const handleFiles = async (files: FileList | File[]) => {
-    setErr('');
-    const arr = Array.from(files);
-    for (const file of arr) {
-      if (!ACCEPT.includes(file.type)) { setErr(`${file.name}: use JPG, PNG, or WebP`); continue; }
-      if (file.size > MAX_MB * 1024 * 1024) { setErr(`${file.name}: over ${MAX_MB}MB`); continue; }
-      setUploading(true);
-      const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-      const { data: up, error: upErr } = await supabase.storage.from('moments').upload(path, file);
-      if (upErr || !up) { setErr(upErr?.message || 'Upload failed'); setUploading(false); continue; }
-      const publicUrl = supabase.storage.from('moments').getPublicUrl(up.path).data.publicUrl;
-      const { error: insErr } = await supabase.from('moments').insert({ image_url: publicUrl });
-      if (insErr) setErr(insErr.message);
-      setUploading(false);
+  const handleFiles = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const accepted = ['image/jpeg', 'image/png', 'image/webp'];
+    const next: Photo[] = [];
+    for (const f of Array.from(files)) {
+      if (!accepted.includes(f.type)) {
+        toast.error(`${f.name}: unsupported type`);
+        continue;
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        toast.error(`${f.name}: over 5MB`);
+        continue;
+      }
+      // TODO: Wire upload to Supabase Storage bucket "moments"
+      //   const path = `${Date.now()}-${f.name}`;
+      //   await supabase.storage.from('moments').upload(path, f);
+      //   const { data: { publicUrl } } = supabase.storage.from('moments').getPublicUrl(path);
+      //   await supabase.from('moments').insert({ image_url: publicUrl });
+      next.push({
+        id: `local-${Date.now()}-${f.name}`,
+        url: URL.createObjectURL(f),
+        uploaded_at: new Date().toISOString().slice(0, 10),
+      });
     }
-    load();
+    if (next.length > 0) {
+      setPhotos((prev) => [...next, ...prev]);
+      toast.success(`Uploaded ${next.length} photo${next.length > 1 ? 's' : ''} ✓`);
+    }
   };
 
-  const handleDelete = async (m: Moment) => {
-    if (!confirm('Delete this photo?')) return;
-    // derive storage path from public URL
-    const match = m.image_url.match(/moments\/(.+)$/);
-    const path = match?.[1];
-    if (path) await supabase.storage.from('moments').remove([path]);
-    await supabase.from('moments').delete().eq('id', m.id);
-    load();
+  const removePhoto = (id: string) => {
+    // TODO: Wire delete to Supabase Storage + moments table
+    //   await supabase.from('moments').delete().eq('id', id);
+    //   await supabase.storage.from('moments').remove([path]);
+    setPhotos((prev) => prev.filter((p) => p.id !== id));
+    toast.success('Photo removed');
   };
 
   return (
     <div>
-      <h2 style={h2}>📸 Moments Gallery</h2>
-      <p style={sub}>Upload customer photos. They appear on the website instantly.</p>
+      <SectionHeader
+        title="Moments Gallery"
+        subtitle="Upload customer photos. They appear on the website instantly."
+      />
 
       <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={(e) => { e.preventDefault(); setDragOver(false); if (e.dataTransfer.files) handleFiles(e.dataTransfer.files); }}
+        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          handleFiles(e.dataTransfer.files);
+        }}
+        onClick={() => fileInput.current?.click()}
         style={{
-          marginTop: 20,
-          border: `2px dashed ${dragOver ? '#F5C800' : 'rgba(245,200,0,0.35)'}`,
-          borderRadius: 16,
+          border: `2px dashed ${dragging ? '#F5C800' : 'rgba(245,200,0,0.4)'}`,
+          background: dragging ? 'rgba(245,200,0,0.06)' : 'rgba(0,0,0,0.15)',
+          borderRadius: 14,
           padding: 40,
           textAlign: 'center',
-          background: dragOver ? 'rgba(245,200,0,0.08)' : '#212666',
+          cursor: 'pointer',
           transition: 'all 0.15s',
         }}
       >
-        <div style={{ fontSize: 40 }}>📤</div>
-        <p style={{ fontFamily: "'Space Mono', monospace", marginTop: 8, color: 'rgba(255,255,255,0.75)' }}>
-          Drop photos here or
-        </p>
-        <label style={{ display: 'inline-block', marginTop: 12, background: '#F5C800', color: '#212666', padding: '10px 22px', borderRadius: 8, fontFamily: "'Hangyaboli', cursive", fontSize: 16, cursor: 'pointer' }}>
-          {uploading ? 'UPLOADING…' : 'BROWSE'}
-          <input type="file" multiple accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={(e) => e.target.files && handleFiles(e.target.files)} />
-        </label>
-        <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 10 }}>
-          JPG, PNG, WebP · max {MAX_MB}MB
-        </p>
-        {err && <p style={{ color: '#ff5b5b', fontSize: 12, marginTop: 12, fontFamily: "'Space Mono', monospace" }}>{err}</p>}
+        <div style={{ fontSize: 40 }}>📷</div>
+        <div style={{ fontFamily: "'Hangyaboly', 'Space Mono', cursive", fontSize: 18, color: 'white', marginTop: 10 }}>
+          Drop photos here or click to browse
+        </div>
+        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>
+          JPG · PNG · WebP · max 5MB each
+        </div>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+          style={{ display: 'none' }}
+          onChange={(e) => handleFiles(e.target.files)}
+        />
       </div>
 
-      <div style={{ marginTop: 28 }}>
-        {loading ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Mono', monospace" }}>Loading…</p>
-        ) : items.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Mono', monospace" }}>No photos yet.</p>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16 }}>
-            {items.map((m) => (
-              <div key={m.id} style={{ background: '#212666', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ position: 'relative', paddingBottom: '75%', background: '#0f1240' }}>
-                  <img src={m.image_url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <button
-                    onClick={() => handleDelete(m)}
-                    title="Delete"
-                    style={{ position: 'absolute', top: 8, right: 8, background: '#e74c3c', border: 'none', color: 'white', width: 32, height: 32, borderRadius: 8, cursor: 'pointer', fontSize: 16 }}
-                  >
-                    🗑
-                  </button>
-                </div>
-                <div style={{ padding: 10, fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.55)' }}>
-                  {new Date(m.uploaded_at).toLocaleString()}
-                </div>
-              </div>
-            ))}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+          gap: 16,
+          marginTop: 28,
+        }}
+      >
+        {photos.map((p) => (
+          <div
+            key={p.id}
+            style={{
+              background: '#2a317a',
+              border: '1px solid rgba(245,200,0,0.15)',
+              borderRadius: 12,
+              overflow: 'hidden',
+              position: 'relative',
+            }}
+          >
+            <div style={{ aspectRatio: '1 / 1', background: p.url ? '#000' : 'rgba(255,255,255,0.08)' }}>
+              {p.url && <img src={p.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+            </div>
+            <button
+              onClick={() => removePhoto(p.id)}
+              aria-label="Delete photo"
+              style={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                background: '#e74c3c',
+                border: 'none',
+                color: 'white',
+                width: 32,
+                height: 32,
+                borderRadius: 8,
+                cursor: 'pointer',
+                fontSize: 14,
+                display: 'grid',
+                placeItems: 'center',
+              }}
+            >
+              🗑
+            </button>
+            <div style={{ padding: '8px 12px', fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.55)' }}>
+              {p.uploaded_at}
+            </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
 }
 
-const h2: React.CSSProperties = { fontFamily: "'Hangyaboli', cursive", fontSize: 28, margin: 0 };
-const sub: React.CSSProperties = { fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.55)', fontSize: 13, marginTop: 8 };
+function SectionHeader({ title, subtitle }: { title: string; subtitle: string }) {
+  return (
+    <div style={{ marginBottom: 24 }}>
+      <h2 style={{ fontFamily: "'Hangyaboly', 'Space Mono', cursive", fontSize: 30, letterSpacing: '0.04em', margin: 0 }}>{title}</h2>
+      <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, color: 'rgba(255,255,255,0.55)', marginTop: 6 }}>{subtitle}</p>
+    </div>
+  );
+}

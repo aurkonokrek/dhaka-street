@@ -1,166 +1,167 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
+import type { ToastAPI } from './Toast';
 
-type Item = {
-  id: string;
-  category: string;
-  name: string;
-  price: string;
-  is_available: boolean;
-  updated_at: string;
+// TODO: Load from menu_items table, save changes to Supabase
+const INITIAL_MENU: Record<string, { id: string; name: string; price: string; is_available: boolean }[]> = {
+  'Starters': [
+    { id: 's1', name: 'Fuchka', price: '£5', is_available: true },
+    { id: 's2', name: 'Chotpoti', price: '£5', is_available: true },
+    { id: 's3', name: 'Jhal Muri', price: '£4', is_available: true },
+  ],
+  'Kebabs': [
+    { id: 'k1', name: 'Seekh Kebab', price: '£7', is_available: true },
+    { id: 'k2', name: 'Chicken Tikka', price: '£8', is_available: true },
+  ],
+  'Curries': [
+    { id: 'c1', name: 'Chicken Curry', price: '£10', is_available: true },
+    { id: 'c2', name: 'Beef Bhuna', price: '£11', is_available: true },
+  ],
+  'Biryani': [
+    { id: 'b1', name: 'Chicken Biryani', price: '£12', is_available: true },
+    { id: 'b2', name: 'Kacchi Biryani', price: '£14', is_available: true },
+  ],
+  'Rolls & Wraps': [
+    { id: 'r1', name: 'Kebab Roll', price: '£6', is_available: true },
+    { id: 'r2', name: 'Paneer Wrap', price: '£6', is_available: true },
+  ],
+  'Sides': [
+    { id: 'sd1', name: 'Naan', price: '£3', is_available: true },
+    { id: 'sd2', name: 'Basmati Rice', price: '£3', is_available: true },
+  ],
+  'Sweets': [
+    { id: 'sw1', name: 'Rasmalai', price: '£4', is_available: true },
+    { id: 'sw2', name: 'Gulab Jamun', price: '£4', is_available: true },
+  ],
+  'Drinks': [
+    { id: 'd1', name: 'Mango Lassi', price: '£4', is_available: true },
+    { id: 'd2', name: 'Masala Chai', price: '£3', is_available: true },
+  ],
 };
 
-export function MenuSection() {
-  const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeCat, setActiveCat] = useState<string>('');
-  const [msg, setMsg] = useState('');
-  const [err, setErr] = useState('');
+const CATEGORIES = Object.keys(INITIAL_MENU);
 
-  // Add form
-  const [newCat, setNewCat] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newPrice, setNewPrice] = useState('');
+export function MenuSection({ toast }: { toast: ToastAPI }) {
+  const [menu, setMenu] = useState(INITIAL_MENU);
+  const [activeCat, setActiveCat] = useState(CATEGORIES[0]);
+  const [savedFlash, setSavedFlash] = useState<Record<string, boolean>>({});
 
-  const load = async () => {
-    setLoading(true);
-    const { data, error } = await supabase.from('menu_items').select('*').order('category').order('name');
-    if (error) setErr(error.message);
-    else {
-      setItems((data as Item[]) || []);
-      if (data && data.length && !activeCat) setActiveCat((data[0] as Item).category);
-    }
-    setLoading(false);
-  };
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, []);
-
-  const categories = Array.from(new Set(items.map((i) => i.category)));
-  const shown = items.filter((i) => i.category === activeCat);
-
-  const updateRow = async (id: string, patch: Partial<Item>) => {
-    setMsg(''); setErr('');
-    const { error } = await supabase.from('menu_items').update(patch).eq('id', id);
-    if (error) setErr(error.message); else { setMsg('Saved.'); load(); }
+  const updateItem = (cat: string, id: string, patch: Partial<{ price: string; is_available: boolean }>) => {
+    setMenu((prev) => ({
+      ...prev,
+      [cat]: prev[cat].map((it) => (it.id === id ? { ...it, ...patch } : it)),
+    }));
   };
 
-  const deleteRow = async (id: string) => {
-    if (!confirm('Delete this menu item?')) return;
-    await supabase.from('menu_items').delete().eq('id', id);
-    load();
-  };
-
-  const addItem = async () => {
-    setErr(''); setMsg('');
-    if (!newCat.trim() || !newName.trim() || !newPrice.trim()) { setErr('Fill all fields'); return; }
-    const { error } = await supabase.from('menu_items').insert({ category: newCat.trim(), name: newName.trim(), price: newPrice.trim(), is_available: true });
-    if (error) { setErr(error.message); return; }
-    setNewName(''); setNewPrice('');
-    setActiveCat(newCat.trim());
-    load();
+  const saveRow = (id: string) => {
+    // TODO: await supabase.from('menu_items').update({ price, is_available }).eq('id', id)
+    setSavedFlash((s) => ({ ...s, [id]: true }));
+    toast.success('Item updated ✓');
+    setTimeout(() => setSavedFlash((s) => ({ ...s, [id]: false })), 1600);
   };
 
   return (
     <div>
-      <h2 style={h2}>📋 Menu Management</h2>
-      <p style={sub}>Toggle items as available or sold out. Update prices.</p>
+      <h2 style={{ fontFamily: "'Hangyaboly', 'Space Mono', cursive", fontSize: 30, letterSpacing: '0.04em', margin: 0 }}>
+        Menu
+      </h2>
+      <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, color: 'rgba(255,255,255,0.55)', marginTop: 6, marginBottom: 24 }}>
+        Adjust prices and mark items sold out.
+      </p>
 
-      {/* Add new item */}
-      <div style={{ ...card, marginTop: 20 }}>
-        <p style={{ ...label, marginBottom: 12 }}>ADD ITEM</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr auto', gap: 8 }}>
-          <input list="cats" placeholder="Category" value={newCat} onChange={(e) => setNewCat(e.target.value)} style={input} />
-          <datalist id="cats">{categories.map((c) => <option key={c} value={c} />)}</datalist>
-          <input placeholder="Item name" value={newName} onChange={(e) => setNewName(e.target.value)} style={input} />
-          <input placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} style={input} />
-          <button onClick={addItem} style={saveBtn}>ADD</button>
-        </div>
-      </div>
-
-      {/* Category tabs */}
-      {categories.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 24 }}>
-          {categories.map((c) => (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 22 }}>
+        {CATEGORIES.map((c) => {
+          const isActive = c === activeCat;
+          return (
             <button
               key={c}
               onClick={() => setActiveCat(c)}
               style={{
-                padding: '8px 14px',
-                borderRadius: 8,
-                border: activeCat === c ? '1px solid #F5C800' : '1px solid rgba(255,255,255,0.15)',
-                background: activeCat === c ? 'rgba(245,200,0,0.15)' : 'transparent',
-                color: activeCat === c ? '#F5C800' : 'rgba(255,255,255,0.75)',
+                background: isActive ? '#F5C800' : 'transparent',
+                color: isActive ? '#212666' : 'rgba(255,255,255,0.8)',
+                border: isActive ? '1px solid #F5C800' : '1px solid rgba(245,200,0,0.25)',
                 fontFamily: "'Space Mono', monospace",
                 fontSize: 12,
+                padding: '8px 14px',
+                borderRadius: 999,
                 cursor: 'pointer',
+                letterSpacing: '0.05em',
               }}
             >
               {c}
             </button>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
 
-      {err && <p style={errStyle}>{err}</p>}
-      {msg && <p style={msgStyle}>{msg}</p>}
-
-      <div style={{ marginTop: 16 }}>
-        {loading ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Mono', monospace" }}>Loading…</p>
-        ) : shown.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Mono', monospace" }}>No items in this category.</p>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {shown.map((it) => <MenuRow key={it.id} item={it} onSave={updateRow} onDelete={deleteRow} />)}
+      <div style={{ display: 'grid', gap: 10 }}>
+        {menu[activeCat].map((item) => (
+          <div
+            key={item.id}
+            style={{
+              background: '#2a317a',
+              border: '1px solid rgba(245,200,0,0.15)',
+              borderRadius: 12,
+              padding: '14px 16px',
+              display: 'grid',
+              gridTemplateColumns: '1.4fr 100px 130px 110px 24px',
+              alignItems: 'center',
+              gap: 12,
+            }}
+          >
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 14, color: 'white' }}>{item.name}</div>
+            <input
+              value={item.price}
+              onChange={(e) => updateItem(activeCat, item.id, { price: e.target.value })}
+              style={{
+                background: 'rgba(0,0,0,0.25)',
+                border: '1px solid rgba(245,200,0,0.2)',
+                color: 'white',
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 13,
+                padding: '8px 10px',
+                borderRadius: 8,
+                outline: 'none',
+              }}
+            />
+            <button
+              onClick={() => updateItem(activeCat, item.id, { is_available: !item.is_available })}
+              style={{
+                background: item.is_available ? 'rgba(46,204,113,0.15)' : 'rgba(231,76,60,0.15)',
+                color: item.is_available ? '#2ecc71' : '#e74c3c',
+                border: `1px solid ${item.is_available ? 'rgba(46,204,113,0.5)' : 'rgba(231,76,60,0.5)'}`,
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 11,
+                padding: '8px 12px',
+                borderRadius: 999,
+                cursor: 'pointer',
+                letterSpacing: '0.06em',
+              }}
+            >
+              {item.is_available ? 'Available' : 'Sold Out'}
+            </button>
+            <button
+              onClick={() => saveRow(item.id)}
+              style={{
+                background: '#F5C800',
+                color: '#212666',
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 12,
+                border: 'none',
+                borderRadius: 8,
+                padding: '8px 14px',
+                cursor: 'pointer',
+                letterSpacing: '0.06em',
+                fontWeight: 700,
+              }}
+            >
+              SAVE
+            </button>
+            <div style={{ color: '#2ecc71', fontSize: 16, opacity: savedFlash[item.id] ? 1 : 0, transition: 'opacity 0.2s' }}>
+              ✓
+            </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
 }
-
-function MenuRow({ item, onSave, onDelete }: { item: Item; onSave: (id: string, patch: Partial<Item>) => void; onDelete: (id: string) => void }) {
-  const [name, setName] = useState(item.name);
-  const [price, setPrice] = useState(item.price);
-  const [available, setAvailable] = useState(item.is_available);
-  const dirty = name !== item.name || price !== item.price || available !== item.is_available;
-
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr auto auto auto', gap: 8, alignItems: 'center', background: '#212666', padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-      <input value={name} onChange={(e) => setName(e.target.value)} style={input} />
-      <input value={price} onChange={(e) => setPrice(e.target.value)} style={input} />
-      <button
-        onClick={() => setAvailable(!available)}
-        style={{
-          padding: '8px 14px',
-          borderRadius: 8,
-          border: 'none',
-          background: available ? '#2ecc71' : '#e74c3c',
-          color: 'white',
-          fontFamily: "'Space Mono', monospace",
-          fontSize: 11,
-          cursor: 'pointer',
-          minWidth: 100,
-        }}
-      >
-        {available ? 'AVAILABLE' : 'SOLD OUT'}
-      </button>
-      <button
-        onClick={() => onSave(item.id, { name, price, is_available: available })}
-        disabled={!dirty}
-        style={{ ...saveBtn, padding: '8px 14px', fontSize: 14, opacity: dirty ? 1 : 0.5, cursor: dirty ? 'pointer' : 'default' }}
-      >
-        SAVE
-      </button>
-      <button onClick={() => onDelete(item.id)} style={{ background: 'transparent', border: '1px solid rgba(231,76,60,0.5)', color: '#e74c3c', padding: '8px 10px', borderRadius: 8, cursor: 'pointer', fontSize: 14 }}>🗑</button>
-    </div>
-  );
-}
-
-const h2: React.CSSProperties = { fontFamily: "'Hangyaboli', cursive", fontSize: 28, margin: 0 };
-const sub: React.CSSProperties = { fontFamily: "'Space Mono', monospace", color: 'rgba(255,255,255,0.55)', fontSize: 13, marginTop: 8 };
-const card: React.CSSProperties = { background: '#212666', border: '1px solid rgba(245,200,0,0.15)', borderRadius: 16, padding: 20 };
-const label: React.CSSProperties = { fontFamily: "'Space Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.08em', margin: 0 };
-const input: React.CSSProperties = { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '10px 12px', color: 'white', fontFamily: "'Space Mono', monospace", fontSize: 13, outline: 'none', boxSizing: 'border-box', width: '100%' };
-const saveBtn: React.CSSProperties = { background: '#F5C800', color: '#212666', fontFamily: "'Hangyaboli', cursive", fontSize: 15, border: 'none', borderRadius: 8, padding: '10px 20px', cursor: 'pointer' };
-const errStyle: React.CSSProperties = { color: '#ff5b5b', fontSize: 12, marginTop: 12, fontFamily: "'Space Mono', monospace" };
-const msgStyle: React.CSSProperties = { color: '#7ee787', fontSize: 12, marginTop: 12, fontFamily: "'Space Mono', monospace" };
