@@ -954,3 +954,62 @@ function Index() {
     </div>
   );
 }
+
+function AnnouncementBanner() {
+  const [msg, setMsg] = useState<string | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from("announcements")
+      .select("message,is_active")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.message) setMsg(data.message);
+      });
+  }, []);
+
+  if (!msg || dismissed) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 60,
+        background: "#F5C800",
+        color: "#212666",
+        fontFamily: "'Space Mono', monospace",
+        fontWeight: 700,
+        fontSize: 14,
+        padding: "10px 20px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 12,
+      }}
+    >
+      <span style={{ flex: 1, textAlign: "center" }}>{msg}</span>
+      <button
+        onClick={() => setDismissed(true)}
+        aria-label="Dismiss"
+        style={{
+          background: "transparent",
+          border: "none",
+          color: "#212666",
+          cursor: "pointer",
+          fontSize: 18,
+          lineHeight: 1,
+          padding: 4,
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
