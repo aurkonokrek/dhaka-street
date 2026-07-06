@@ -14,16 +14,153 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      announcements: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          message: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          message: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          message?: string
+        }
+        Relationships: []
+      }
+      hours: {
+        Row: {
+          day_label: string
+          hours_text: string
+          id: string
+          is_open: boolean
+          updated_at: string
+        }
+        Insert: {
+          day_label: string
+          hours_text: string
+          id?: string
+          is_open?: boolean
+          updated_at?: string
+        }
+        Update: {
+          day_label?: string
+          hours_text?: string
+          id?: string
+          is_open?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          category: string
+          id: string
+          is_available: boolean
+          name: string
+          price: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          id?: string
+          is_available?: boolean
+          name: string
+          price: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          id?: string
+          is_available?: boolean
+          name?: string
+          price?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      moments: {
+        Row: {
+          caption: string | null
+          id: string
+          image_url: string
+          uploaded_at: string
+        }
+        Insert: {
+          caption?: string | null
+          id?: string
+          image_url: string
+          uploaded_at?: string
+        }
+        Update: {
+          caption?: string | null
+          id?: string
+          image_url?: string
+          uploaded_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_settings: {
+        Row: {
+          id: string
+          updated_at: string
+          youtube_url: string
+        }
+        Insert: {
+          id?: string
+          updated_at?: string
+          youtube_url: string
+        }
+        Update: {
+          id?: string
+          updated_at?: string
+          youtube_url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +287,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
