@@ -2,6 +2,11 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import logo from '@/assets/dhaka-street-logo.jpg';
+import { GallerySection } from '@/components/admin/GallerySection';
+import { VideoSection } from '@/components/admin/VideoSection';
+import { MenuSection } from '@/components/admin/MenuSection';
+import { BannerSection } from '@/components/admin/BannerSection';
+import { HoursSection } from '@/components/admin/HoursSection';
 
 type SectionId = 'gallery' | 'video' | 'menu' | 'banner' | 'hours';
 
