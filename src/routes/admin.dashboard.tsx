@@ -1,11 +1,17 @@
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import logo from '@/assets/dhaka-street-logo.jpg';
+import { supabase } from '@/integrations/supabase/client';
 import { GallerySection } from '@/components/admin/GallerySection';
 import { VideoSection } from '@/components/admin/VideoSection';
 import { MenuSection } from '@/components/admin/MenuSection';
 import { BannerSection } from '@/components/admin/BannerSection';
 import { HoursSection } from '@/components/admin/HoursSection';
+import { CRMSection } from '@/components/admin/CRMSection';
+import { BookingsSection } from '@/components/admin/BookingsSection';
+import { SubmissionsSection } from '@/components/admin/SubmissionsSection';
+import { AvailabilitySection } from '@/components/admin/AvailabilitySection';
+import { AnalyticsSection } from '@/components/admin/AnalyticsSection';
 import { ToastHost, useToastController, type ToastAPI } from '@/components/admin/Toast';
 
 // ─── SUPABASE INTEGRATION POINTS ───
@@ -17,7 +23,7 @@ import { ToastHost, useToastController, type ToastAPI } from '@/components/admin
 // Auth: email + password
 // RLS: public SELECT, authenticated admin INSERT/UPDATE/DELETE
 
-type SectionId = 'gallery' | 'video' | 'menu' | 'banner' | 'hours';
+type SectionId = 'gallery' | 'video' | 'menu' | 'banner' | 'hours' | 'crm' | 'bookings' | 'submissions' | 'availability' | 'analytics';
 
 const SECTIONS: { id: SectionId; icon: string; label: string }[] = [
   { id: 'gallery', icon: '📸', label: 'Gallery' },
@@ -25,6 +31,11 @@ const SECTIONS: { id: SectionId; icon: string; label: string }[] = [
   { id: 'menu', icon: '📋', label: 'Menu' },
   { id: 'banner', icon: '📢', label: 'Banner' },
   { id: 'hours', icon: '🕐', label: 'Hours' },
+  { id: 'crm', icon: '👥', label: 'CRM' },
+  { id: 'bookings', icon: '📅', label: 'Bookings' },
+  { id: 'submissions', icon: '📥', label: 'Submissions' },
+  { id: 'availability', icon: '🕒', label: 'Availability' },
+  { id: 'analytics', icon: '📊', label: 'Analytics' },
 ];
 
 export const Route = createFileRoute('/admin/dashboard')({
@@ -54,14 +65,45 @@ export const Route = createFileRoute('/admin/dashboard')({
 function AdminDashboard() {
   const navigate = useNavigate();
   const [active, setActive] = useState<SectionId>('gallery');
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const toastCtrl = useToastController();
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        navigate({ to: '/admin' });
+      } else {
+        supabase.from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .eq('role', 'admin')
+          .then(({ data: roles, error }) => {
+            if (error || !roles || roles.length === 0) {
+              supabase.auth.signOut().then(() => {
+                navigate({ to: '/admin' });
+              });
+            } else {
+              setCheckingAuth(false);
+            }
+          });
+      }
+    });
+  }, [navigate]);
+
   const handleLogout = useCallback(async () => {
-    // TODO: Replace with supabase.auth.signOut()
+    await supabase.auth.signOut();
     navigate({ to: '/admin' });
   }, [navigate]);
 
   const toast: ToastAPI = toastCtrl.api;
+
+  if (checkingAuth) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#181e55', color: 'white', display: 'grid', placeItems: 'center', fontFamily: "'Space Mono', monospace" }}>
+        Loading admin session...
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#181e55', color: 'white', paddingBottom: 96 }}>
@@ -168,6 +210,11 @@ function AdminDashboard() {
           {active === 'menu' && <MenuSection toast={toast} />}
           {active === 'banner' && <BannerSection toast={toast} />}
           {active === 'hours' && <HoursSection toast={toast} />}
+          {active === 'crm' && <CRMSection toast={toast} />}
+          {active === 'bookings' && <BookingsSection toast={toast} />}
+          {active === 'submissions' && <SubmissionsSection toast={toast} />}
+          {active === 'availability' && <AvailabilitySection toast={toast} />}
+          {active === 'analytics' && <AnalyticsSection toast={toast} />}
         </main>
       </div>
 

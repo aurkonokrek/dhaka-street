@@ -1,6 +1,7 @@
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, useRouter, useLocation, Outlet } from '@tanstack/react-router';
 import { useState } from 'react';
 import logo from '@/assets/dhaka-street-logo.jpg';
+import { supabase } from '@/integrations/supabase/client';
 
 // ─── SUPABASE INTEGRATION POINTS ───
 // Developer: Wire these up after connecting Supabase
@@ -19,7 +20,7 @@ export const Route = createFileRoute('/admin')({
       { name: 'robots', content: 'noindex, nofollow' },
     ],
   }),
-  component: AdminLogin,
+  component: AdminLayout,
   errorComponent: ({ error, reset }) => {
     const router = useRouter();
     return (
@@ -35,6 +36,17 @@ export const Route = createFileRoute('/admin')({
   },
   notFoundComponent: () => <div>Not found</div>,
 });
+
+function AdminLayout() {
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/admin/dashboard');
+
+  if (isDashboard) {
+    return <Outlet />;
+  }
+
+  return <AdminLogin />;
+}
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -52,11 +64,51 @@ function AdminLogin() {
     }
     setLoading(true);
 
-    // TODO: Replace with supabase.auth.signInWithPassword({ email, password })
-    // For now: any email + password combination goes through to dashboard.
-    await new Promise((r) => setTimeout(r, 300));
-    setLoading(false);
-    navigate({ to: '/admin/dashboard' });
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (!data.user) {
+        setError('No user returned.');
+        setLoading(false);
+        return;
+      }
+
+      // Check if user has admin role
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .eq('role', 'admin');
+
+      if (rolesError) {
+        setError(`Failed to verify privileges: ${rolesError.message}`);
+        await supabase.auth.signOut();
+        setLoading(false);
+        return;
+      }
+
+      if (!roles || roles.length === 0) {
+        setError('Unauthorized: Admin access only.');
+        await supabase.auth.signOut();
+        setLoading(false);
+        return;
+      }
+
+      setLoading(false);
+      navigate({ to: '/admin/dashboard' });
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred.');
+      setLoading(false);
+    }
   };
 
   const inputStyle: React.CSSProperties = {

@@ -1,18 +1,64 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import type { ToastAPI } from './Toast';
 
 const MAX = 120;
 
 export function BannerSection({ toast }: { toast: ToastAPI }) {
-  // TODO: Load from announcements table (WHERE is_active LIMIT 1)
+  const [id, setId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [isActive, setIsActive] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const save = () => {
-    // TODO: Save to announcements table, website reads on load
-    //   await supabase.from('announcements').upsert({ id, message, is_active: isActive });
-    toast.success('Banner saved ✓');
+  useEffect(() => {
+    supabase
+      .from('announcements')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Error fetching announcement:', error);
+        } else if (data) {
+          setId(data.id);
+          setMessage(data.message);
+          setIsActive(data.is_active);
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  const save = async () => {
+    try {
+      const payload: any = {
+        message,
+        is_active: isActive,
+      };
+      if (id) {
+        payload.id = id;
+      }
+      const { data, error } = await supabase
+        .from('announcements')
+        .upsert(payload)
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (data) setId(data.id);
+      toast.success('Banner saved ✓');
+    } catch (err: any) {
+      toast.error(`Save failed: ${err.message}`);
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ fontFamily: "'Space Mono', monospace", padding: '20px 0' }}>
+        Loading announcement...
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: 720 }}>

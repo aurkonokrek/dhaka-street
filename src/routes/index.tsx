@@ -175,7 +175,7 @@ function Index() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [hoursRows, setHoursRows] = useState<{ day_label: string; hours_text: string; is_open: boolean }[]>([]);
   const [moments, setMoments] = useState<{ id: string; image_url: string; caption: string | null }[]>([]);
-  const [soldOutNames, setSoldOutNames] = useState<Set<string>>(new Set());
+  const [dbMenuItems, setDbMenuItems] = useState<Map<string, { price: string; is_available: boolean }>>(new Map());
 
   useEffect(() => {
     (async () => {
@@ -183,12 +183,18 @@ function Index() {
         supabase.from("video_settings").select("youtube_url").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
         supabase.from("hours").select("day_label,hours_text,is_open").order("updated_at"),
         supabase.from("moments").select("id,image_url,caption").order("uploaded_at", { ascending: false }),
-        supabase.from("menu_items").select("name,is_available").eq("is_available", false),
+        supabase.from("menu_items").select("name,price,is_available"),
       ]);
       if (v?.youtube_url) setVideoUrl(v.youtube_url);
       if (h) setHoursRows(h);
       if (m) setMoments(m);
-      if (mi) setSoldOutNames(new Set(mi.map((r) => r.name.trim().toLowerCase())));
+      if (mi) {
+        const itemMap = new Map();
+        mi.forEach((r) => {
+          itemMap.set(r.name.trim().toLowerCase(), { price: r.price, is_available: r.is_available });
+        });
+        setDbMenuItems(itemMap);
+      }
     })();
   }, []);
 
@@ -677,7 +683,10 @@ function Index() {
               </div>
               <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
                 {MENU_TABS[activeTab].map((item, i) => {
-                  const soldOut = soldOutNames.has(item.name.trim().toLowerCase());
+                  const dbItem = dbMenuItems.get(item.name.trim().toLowerCase());
+                  const isAvailable = dbItem ? dbItem.is_available : true;
+                  const displayPrice = dbItem ? dbItem.price : item.price;
+                  const soldOut = !isAvailable;
                   return (
                     <div
                       key={i}
@@ -705,7 +714,7 @@ function Index() {
                         className="font-display text-yellow-street whitespace-nowrap ml-3"
                         style={{ letterSpacing: "0.04em", textDecoration: soldOut ? "line-through" : "none" }}
                       >
-                        ৳ {item.price}
+                        ৳ {displayPrice}
                       </span>
                     </div>
                   );

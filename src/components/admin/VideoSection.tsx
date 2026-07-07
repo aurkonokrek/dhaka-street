@@ -1,19 +1,67 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import type { ToastAPI } from './Toast';
 
 const PLACEHOLDER = 'https://www.youtube.com/embed/your-video-id';
 
 export function VideoSection({ toast }: { toast: ToastAPI }) {
-  // TODO: Load from video_settings table (SELECT youtube_url LIMIT 1)
+  const [id, setId] = useState<string | null>(null);
   const [url, setUrl] = useState(PLACEHOLDER);
   const [draft, setDraft] = useState(PLACEHOLDER);
+  const [loading, setLoading] = useState(true);
 
-  const save = () => {
-    // TODO: Save to video_settings table in Supabase
-    //   await supabase.from('video_settings').upsert({ id, youtube_url: draft });
-    setUrl(draft);
-    toast.success('Saved successfully ✓');
+  useEffect(() => {
+    supabase
+      .from('video_settings')
+      .select('*')
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Error fetching video URL:', error);
+        } else if (data) {
+          setId(data.id);
+          setUrl(data.youtube_url);
+          setDraft(data.youtube_url);
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  const save = async () => {
+    try {
+      const payload: any = {
+        youtube_url: draft,
+      };
+      if (id) {
+        payload.id = id;
+      }
+      const { data, error } = await supabase
+        .from('video_settings')
+        .upsert(payload)
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setId(data.id);
+        setUrl(data.youtube_url);
+        setDraft(data.youtube_url);
+      }
+      toast.success('Saved successfully ✓');
+    } catch (err: any) {
+      toast.error(`Save failed: ${err.message}`);
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ fontFamily: "'Space Mono', monospace", padding: '20px 0' }}>
+        Loading video settings...
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: 720 }}>

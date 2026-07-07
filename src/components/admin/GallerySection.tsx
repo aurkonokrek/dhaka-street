@@ -1,27 +1,38 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import type { ToastAPI } from './Toast';
-
-// TODO: Replace mock data with SELECT * FROM moments ORDER BY uploaded_at DESC
-const INITIAL_PHOTOS = [
-  { id: 'm1', url: '', uploaded_at: '2026-07-01' },
-  { id: 'm2', url: '', uploaded_at: '2026-06-28' },
-  { id: 'm3', url: '', uploaded_at: '2026-06-25' },
-  { id: 'm4', url: '', uploaded_at: '2026-06-22' },
-  { id: 'm5', url: '', uploaded_at: '2026-06-18' },
-  { id: 'm6', url: '', uploaded_at: '2026-06-14' },
-];
 
 type Photo = { id: string; url: string; uploaded_at: string };
 
 export function GallerySection({ toast }: { toast: ToastAPI }) {
-  const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [dragging, setDragging] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const handleFiles = (files: FileList | null) => {
+  useEffect(() => {
+    supabase.from('moments')
+      .select('*')
+      .order('uploaded_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Error fetching moments:', error);
+        } else if (data) {
+          setPhotos(data.map((m: any) => ({
+            id: m.id,
+            url: m.image_url,
+            uploaded_at: m.uploaded_at ? m.uploaded_at.slice(0, 10) : '',
+          })));
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     const accepted = ['image/jpeg', 'image/png', 'image/webp'];
     const next: Photo[] = [];
+    
     for (const f of Array.from(files)) {
       if (!accepted.includes(f.type)) {
         toast.error(`${f.name}: unsupported type`);
@@ -31,30 +42,75 @@ export function GallerySection({ toast }: { toast: ToastAPI }) {
         toast.error(`${f.name}: over 5MB`);
         continue;
       }
-      // TODO: Wire upload to Supabase Storage bucket "moments"
-      //   const path = `${Date.now()}-${f.name}`;
-      //   await supabase.storage.from('moments').upload(path, f);
-      //   const { data: { publicUrl } } = supabase.storage.from('moments').getPublicUrl(path);
-      //   await supabase.from('moments').insert({ image_url: publicUrl });
-      next.push({
-        id: `local-${Date.now()}-${f.name}`,
-        url: URL.createObjectURL(f),
-        uploaded_at: new Date().toISOString().slice(0, 10),
-      });
+
+      try {
+        const fileExt = f.name.split('.').pop();
+        const path = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+          .from('moments')
+          .upload(path, f);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('moments')
+          .getPublicUrl(path);
+
+        const { data: momentData, error: dbError } = await supabase
+          .from('moments')
+          .insert({ image_url: publicUrl, caption: f.name })
+          .select()
+          .single();
+
+        if (dbError) throw dbError;
+
+        if (momentData) {
+          next.push({
+            id: momentData.id,
+            url: momentData.image_url,
+            uploaded_at: momentData.uploaded_at ? momentData.uploaded_at.slice(0, 10) : '',
+          });
+        }
+      } catch (err: any) {
+        toast.error(`Upload failed: ${err.message}`);
+      }
     }
+    
     if (next.length > 0) {
       setPhotos((prev) => [...next, ...prev]);
       toast.success(`Uploaded ${next.length} photo${next.length > 1 ? 's' : ''} ✓`);
     }
   };
 
-  const removePhoto = (id: string) => {
-    // TODO: Wire delete to Supabase Storage + moments table
-    //   await supabase.from('moments').delete().eq('id', id);
-    //   await supabase.storage.from('moments').remove([path]);
-    setPhotos((prev) => prev.filter((p) => p.id !== id));
-    toast.success('Photo removed');
+  const removePhoto = async (id: string) => {
+    const photo = photos.find((p) => p.id === id);
+    if (!photo) return;
+
+    try {
+      const urlParts = photo.url.split('/moments/');
+      const path = urlParts[urlParts.length - 1];
+
+      const { error: dbError } = await supabase.from('moments').delete().eq('id', id);
+      if (dbError) throw dbError;
+
+      if (path) {
+        await supabase.storage.from('moments').remove([path]);
+      }
+
+      setPhotos((prev) => prev.filter((p) => p.id !== id));
+      toast.success('Photo removed');
+    } catch (err: any) {
+      toast.error(`Delete failed: ${err.message}`);
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ fontFamily: "'Space Mono', monospace", padding: '20px 0' }}>
+        Loading moments...
+      </div>
+    );
+  }
 
   return (
     <div>

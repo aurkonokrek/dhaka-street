@@ -1,38 +1,91 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import type { ToastAPI } from './Toast';
 
 type Row = { id: string; day_label: string; hours_text: string; is_open: boolean };
 
-// TODO: Load from hours table (SELECT * FROM hours ORDER BY updated_at)
-const INITIAL_ROWS: Row[] = [
-  { id: 'h1', day_label: 'Daily', hours_text: '4 PM – 1 AM', is_open: true },
-  { id: 'h2', day_label: 'Late Night', hours_text: 'Welcome anytime after midnight', is_open: true },
-];
-
 export function HoursSection({ toast }: { toast: ToastAPI }) {
-  const [rows, setRows] = useState<Row[]>(INITIAL_ROWS);
+  const [rows, setRows] = useState<Row[]>([]);
+  const [loading, setLoading] = useState(true);
   const [savedFlash, setSavedFlash] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    supabase.from('hours')
+      .select('*')
+      .order('day_label')
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Error fetching hours:', error);
+        } else if (data) {
+          setRows(data);
+        }
+        setLoading(false);
+      });
+  }, []);
 
   const update = (id: string, patch: Partial<Row>) => {
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)));
   };
 
-  const saveRow = (id: string) => {
-    // TODO: await supabase.from('hours').update({ day_label, hours_text, is_open }).eq('id', id)
-    setSavedFlash((s) => ({ ...s, [id]: true }));
-    toast.success('Hours updated ✓');
-    setTimeout(() => setSavedFlash((s) => ({ ...s, [id]: false })), 1600);
+  const saveRow = async (id: string) => {
+    const row = rows.find((r) => r.id === id);
+    if (!row) return;
+
+    try {
+      const isNew = id.startsWith('new-');
+      const payload: any = {
+        day_label: row.day_label,
+        hours_text: row.hours_text,
+        is_open: row.is_open,
+      };
+      if (!isNew) {
+        payload.id = id;
+      }
+
+      const { data, error } = await supabase.from('hours')
+        .upsert(payload)
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setRows((prev) => prev.map((r) => (r.id === id ? data : r)));
+        setSavedFlash((s) => ({ ...s, [data.id]: true }));
+        toast.success('Hours updated ✓');
+        setTimeout(() => setSavedFlash((s) => ({ ...s, [data.id]: false })), 1600);
+      }
+    } catch (err: any) {
+      toast.error(`Save failed: ${err.message}`);
+    }
   };
 
   const addRow = () => {
-    // TODO: await supabase.from('hours').insert({ day_label: '', hours_text: '', is_open: true })
     setRows((prev) => [...prev, { id: `new-${Date.now()}`, day_label: '', hours_text: '', is_open: true }]);
   };
 
-  const removeRow = (id: string) => {
-    // TODO: await supabase.from('hours').delete().eq('id', id)
-    setRows((prev) => prev.filter((r) => r.id !== id));
+  const removeRow = async (id: string) => {
+    if (id.startsWith('new-')) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from('hours').delete().eq('id', id);
+      if (error) throw error;
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      toast.success('Hours deleted');
+    } catch (err: any) {
+      toast.error(`Delete failed: ${err.message}`);
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ fontFamily: "'Space Mono', monospace", padding: '20px 0' }}>
+        Loading hours...
+      </div>
+    );
+  }
 
   const inputStyle: React.CSSProperties = {
     background: 'rgba(0,0,0,0.25)',
